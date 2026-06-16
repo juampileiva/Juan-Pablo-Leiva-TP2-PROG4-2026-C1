@@ -1,0 +1,104 @@
+<div class="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+  <div class="bg-white rounded-lg shadow-md w-full max-w-2xl p-8">
+    
+    <div class="text-center mb-8">
+      <h2 class="text-3xl font-bold text-gray-800">Crear Cuenta</h2>
+      <p class="text-gray-500 mt-2">Completá tus datos para unirte a la red social.</p>
+    </div>
+
+    <form [formGroup]="registroForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+          <input type="text" formControlName="nombre" 
+            class="w-full px-4 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
+            [ngClass]="{'border-red-500': registroForm.get('nombre')?.invalid && registroForm.get('nombre')?.touched}">
+          <span *ngIf="registroForm.get('nombre')?.invalid && registroForm.get('nombre')?.touched" class="text-xs text-red-500 mt-1">
+            Requerido. Mínimo 2 caracteres.
+          </span>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Apellido</label>
+          <input type="text" formControlName="apellido" 
+            class="w-full px-4 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
+            [ngClass]="{'border-red-500': registroForm.get('apellido')?.invalid && registroForm.get('apellido')?.touched}">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Correo Electrónico</label>
+          <input type="email" formControlName="correo" 
+            class="w-full px-4 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
+            [ngClass]="{'border-red-500': registroForm.get('correo')?.invalid && registroForm.get('correo')?.touched}">
+          <span *ngIf="registroForm.get('correo')?.invalid && registroForm.get('correo')?.touched" class="text-xs text-red-500 mt-1">
+            Formato de correo inválido.
+          </span>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Nombre de Usuario</label>
+          <input type="text" formControlName="nombreUsuario" 
+            class="w-full px-4 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
+            [ngClass]="{'border-red-500': registroForm.get('nombreUsuario')?.invalid && registroForm.get('nombreUsuario')?.touched}">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+          <input type="password" formControlName="contrasena" 
+            class="w-full px-4 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
+            [ngClass]="{'border-red-500': registroForm.get('contrasena')?.invalid && registroForm.get('contrasena')?.touched}">
+          <span *ngIf="registroForm.get('contrasena')?.invalid && registroForm.get('contrasena')?.touched" class="text-xs text-red-500 mt-1 block">
+            Mínimo 8 caracteres, 1 mayúscula y 1 número.
+          </span>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Repetir Contraseña</label>
+          <input type="password" formControlName="repetirContrasena" 
+            class="w-full px-4 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
+            [ngClass]="{'border-red-500': registroForm.get('repetirContrasena')?.hasError('passwordsMismatch') && registroForm.get('repetirContrasena')?.touched}">
+          <span *ngIf="registroForm.get('repetirContrasena')?.hasError('passwordsMismatch') && registroForm.get('repetirContrasena')?.touched" class="text-xs text-red-500 mt-1">
+            Las contraseñas no coinciden.
+          </span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Fecha de Nacimiento</label>
+          <input type="date" formControlName="fechaNacimiento" 
+            class="w-full px-4 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Foto de Perfil (Opcional)</label>
+          <input type="file" accept="image/*" (change)="onFileSelected($event)"
+            class="w-full px-3 py-1.5 border rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50 text-sm file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Descripción Breve</label>
+        <textarea formControlName="descripcionBreve" rows="3" maxlength="250"
+          class="w-full px-4 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50 resize-none"></textarea>
+      </div>
+
+      <div class="pt-4">
+        <button type="submit" [disabled]="enviando"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md transition duration-200 disabled:opacity-50">
+          {{ enviando ? 'Procesando...' : 'Registrarse' }}
+        </button>
+      </div>
+      
+      <div class="text-center mt-4">
+        <p class="text-sm text-gray-600">¿Ya tenés una cuenta? <a href="/login" class="text-blue-600 hover:underline">Iniciá sesión</a></p>
+      </div>
+
+    </form>
+  </div>
+</div>

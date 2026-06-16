@@ -1,0 +1,59 @@
+<div class="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+  <div class="bg-white rounded-lg shadow-md w-full max-w-md p-8 relative">
+    
+    <div class="text-center mb-8">
+      <h2 class="text-3xl font-bold text-gray-800">Iniciar Sesión</h2>
+      <p class="text-gray-500 mt-2">Bienvenido nuevamente a la red social.</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Correo o Nombre de Usuario</label>
+        <input type="text" formControlName="identificador" 
+          class="w-full px-4 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
+          [ngClass]="{'border-red-500': loginForm.get('identificador')?.invalid && loginForm.get('identificador')?.touched}">
+        <span *ngIf="loginForm.get('identificador')?.invalid && loginForm.get('identificador')?.touched" class="text-xs text-red-500 mt-1">
+          Este campo es obligatorio.
+        </span>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+        <input type="password" formControlName="contrasena" 
+          class="w-full px-4 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
+          [ngClass]="{'border-red-500': loginForm.get('contrasena')?.invalid && loginForm.get('contrasena')?.touched}">
+        <span *ngIf="loginForm.get('contrasena')?.invalid && loginForm.get('contrasena')?.touched" class="text-xs text-red-500 mt-1 block">
+          Mínimo 8 caracteres, 1 mayúscula y 1 número.
+        </span>
+      </div>
+
+      <div class="pt-2">
+        <button type="submit" [disabled]="enviando"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md transition duration-200 disabled:opacity-50">
+          {{ enviando ? 'Verificando...' : 'Ingresar' }}
+        </button>
+      </div>
+      
+      <div class="text-center mt-4">
+        <p class="text-sm text-gray-600">¿No tenés una cuenta? <a href="/registro" class="text-blue-600 hover:underline">Registrate acá</a></p>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<div *ngIf="mostrarModalError" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 transition-opacity">
+  <div class="bg-white rounded-lg shadow-xl max-w-sm w-full p-6 text-center transform transition-all">
+    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+      <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </div>
+    <h3 class="text-lg font-bold text-gray-900 mb-2">Error de acceso</h3>
+    <p class="text-gray-600 mb-6">{{ mensajeError }}</p>
+    <button (click)="cerrarModal()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md transition duration-200">
+      Cerrar
+    </button>
+  </div>
+</div>
