@@ -1,14 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { 
-  ReactiveFormsModule, 
-  FormBuilder, 
-  FormGroup, 
-  Validators, 
-  AbstractControl, 
-  ValidationErrors 
-} from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth';
 
 @Component({
@@ -19,84 +11,59 @@ import { AuthService } from '../../services/auth';
   styleUrl: './registro.css'
 })
 export class RegistroComponent {
-  registroForm: FormGroup;
-  imagenSeleccionada: File | null = null;
-  imagenPreview: string | ArrayBuffer | null = null;
-  enviando = false;
-
+  @ViewChild('miModal') miModal!: ElementRef<HTMLDialogElement>;
+  
+  modalTitulo: string = '';
+  modalMensaje: string = '';
+  
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
-  private router = inject(Router);
+  registroForm: FormGroup;
+  imagen: File | null = null;
 
   constructor() {
     this.registroForm = this.fb.group({
-      nombre: ['', [Validators.required, Validators.minLength(2)]],
-      apellido: ['', [Validators.required, Validators.minLength(2)]],
+      nombre: ['', Validators.required],
+      apellido: ['', Validators.required],
       correo: ['', [Validators.required, Validators.email]],
-      nombreUsuario: ['', [Validators.required, Validators.minLength(4)]],
-      contrasena: ['', [
-        Validators.required, 
-        Validators.minLength(8),
-        Validators.pattern(/^(?=.*[A-Z])(?=.*\d).+$/)
-      ]],
-      repetirContrasena: ['', [Validators.required]],
-      fechaNacimiento: ['', [Validators.required]],
-      descripcionBreve: ['', [Validators.maxLength(250)]]
-    }, { validators: this.passwordsMatchValidator });
+      nombreUsuario: ['', Validators.required],
+      contrasena: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[A-Z])(?=.*\d).+$/)]],
+      repetirContrasena: ['', Validators.required],
+      fechaNacimiento: ['', Validators.required],
+      descripcionBreve: ['']
+    });
   }
 
-  private passwordsMatchValidator(control: AbstractControl): ValidationErrors | null {
-    const password = control.get('contrasena');
-    const repeatPassword = control.get('repetirContrasena');
-
-    if (password && repeatPassword && password.value !== repeatPassword.value) {
-      repeatPassword.setErrors({ passwordsMismatch: true });
-      return { passwordsMismatch: true };
-    }
-    return null;
+  // Método para mostrar el modal en lugar de alert()
+  abrirModal(titulo: string, mensaje: string) {
+    this.modalTitulo = titulo;
+    this.modalMensaje = mensaje;
+    this.miModal.nativeElement.showModal();
   }
 
-  onFileSelected(event: Event): void {
-    const element = event.target as HTMLInputElement;
-    const file = element.files?.[0];
-    
-    if (file) {
-      this.imagenSeleccionada = file;
-      
-      const reader = new FileReader();
-      reader.onload = e => this.imagenPreview = reader.result;
-      reader.readAsDataURL(file);
-    }
+  cerrarModal() {
+    this.miModal.nativeElement.close();
   }
 
-  onSubmit(): void {
+  onFileSelected(event: any) {
+    if (event.target.files.length > 0) this.imagen = event.target.files[0];
+  }
+
+  onSubmit() {
     if (this.registroForm.invalid) {
-      this.registroForm.markAllAsTouched();
+      this.abrirModal('Error', 'Por favor, completá todos los campos correctamente.');
       return;
     }
 
-    this.enviando = true;
-    
     const formData = new FormData();
     Object.keys(this.registroForm.value).forEach(key => {
-      if (key !== 'repetirContrasena' && this.registroForm.value[key] !== null) {
-        formData.append(key, this.registroForm.value[key]);
-      }
+      if (key !== 'repetirContrasena') formData.append(key, this.registroForm.value[key]);
     });
-
-    if (this.imagenSeleccionada) {
-      formData.append('imagenPerfil', this.imagenSeleccionada);
-    }
+    if (this.imagen) formData.append('imagenPerfil', this.imagen);
 
     this.authService.registro(formData).subscribe({
-      next: (response) => {
-        this.enviando = false;
-        this.router.navigate(['/login']);
-      },
-      error: (err) => {
-        this.enviando = false;
-        console.error('Error al registrar:', err);
-      }
+      next: () => this.abrirModal('Éxito', 'Usuario registrado correctamente.'),
+      error: () => this.abrirModal('Error', 'Hubo un problema al registrar el usuario.')
     });
   }
 }

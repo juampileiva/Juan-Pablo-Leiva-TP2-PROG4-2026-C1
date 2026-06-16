@@ -10,6 +10,7 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
+  // Usamos FormData para enviar tanto texto como archivos
   registro(formData: FormData): Observable<any> {
     return this.http.post(`${this.API_URL}/registro`, formData);
   }
