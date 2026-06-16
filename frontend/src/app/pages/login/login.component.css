@@ -1,0 +1,51 @@
+:host {
+  display: block;
+}
+
+.auth-card {
+  max-width: 460px;
+  margin: 40px auto;
+  background: white;
+  padding: 32px;
+  border-radius: 22px;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 16px;
+}
+
+.campo label {
+  font-weight: 700;
+  color: #334155;
+}
+
+.campo input {
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.error {
+  color: #dc2626;
+  font-size: 13px;
+}
+
+.btn-principal {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 13px;
+  background: #2563eb;
+  color: white;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.link {
+  margin-top: 16px;
+  text-align: center;
+}

@@ -1,0 +1,106 @@
+<section class="auth-card">
+  <h1>Crear cuenta</h1>
+  <p class="subtitulo">Completá tus datos para registrarte en la red social.</p>
+
+  <form [formGroup]="form" (ngSubmit)="registrar()">
+    <div class="grilla">
+      <div class="campo">
+        <label>Nombre</label>
+        <input type="text" formControlName="nombre" />
+        @if (form.controls.nombre.touched && form.controls.nombre.invalid) {
+          <small class="error">Ingresá tu nombre.</small>
+        }
+      </div>
+
+      <div class="campo">
+        <label>Apellido</label>
+        <input type="text" formControlName="apellido" />
+        @if (form.controls.apellido.touched && form.controls.apellido.invalid) {
+          <small class="error">Ingresá tu apellido.</small>
+        }
+      </div>
+
+      <div class="campo">
+        <label>Correo</label>
+        <input type="email" formControlName="correo" />
+        @if (form.controls.correo.touched && form.controls.correo.invalid) {
+          <small class="error">Ingresá un correo válido.</small>
+        }
+      </div>
+
+      <div class="campo">
+        <label>Nombre de usuario</label>
+        <input type="text" formControlName="nombreUsuario" />
+        @if (form.controls.nombreUsuario.touched && form.controls.nombreUsuario.invalid) {
+          <small class="error">Debe tener al menos 4 caracteres.</small>
+        }
+      </div>
+
+      <div class="campo">
+        <label>Contraseña</label>
+        <input type="password" formControlName="password" />
+        @if (form.controls.password.touched && form.controls.password.invalid) {
+          <small class="error">
+            Mínimo 8 caracteres, una mayúscula y un número.
+          </small>
+        }
+      </div>
+
+      <div class="campo">
+        <label>Repetir contraseña</label>
+        <input type="password" formControlName="repetirPassword" />
+        @if (form.touched && form.errors?.['passwordsNoCoinciden']) {
+          <small class="error">Las contraseñas no coinciden.</small>
+        }
+      </div>
+
+      <div class="campo">
+        <label>Fecha de nacimiento</label>
+        <input type="date" formControlName="fechaNacimiento" />
+        @if (form.controls.fechaNacimiento.touched && form.controls.fechaNacimiento.invalid) {
+          <small class="error">Ingresá tu fecha de nacimiento.</small>
+        }
+      </div>
+
+      <div class="campo">
+        <label>Perfil</label>
+        <select formControlName="perfil">
+          <option value="usuario">Usuario</option>
+          <option value="administrador">Administrador</option>
+        </select>
+      </div>
+
+      <div class="campo campo-completo">
+        <label>Descripción breve</label>
+        <textarea rows="4" formControlName="descripcionBreve"></textarea>
+        @if (form.controls.descripcionBreve.touched && form.controls.descripcionBreve.invalid) {
+          <small class="error">La descripción debe tener al menos 10 caracteres.</small>
+        }
+      </div>
+
+      <div class="campo campo-completo">
+        <label>Imagen de perfil</label>
+        <input type="file" accept="image/*" (change)="seleccionarImagen($event)" />
+      </div>
+    </div>
+
+    <button class="btn-principal" type="submit" [disabled]="cargando">
+      {{ cargando ? 'Registrando...' : 'Registrarme' }}
+    </button>
+  </form>
+
+  <p class="link">
+    ¿Ya tenés cuenta?
+    <a routerLink="/login">Iniciar sesión</a>
+  </p>
+</section>
+
+@if (modalMensaje) {
+  <div class="modal-fondo">
+    <div class="modal-contenido">
+      <h3>Mensaje</h3>
+      <p>{{ modalMensaje }}</p>
+      <button type="button" class="btn-principal" (click)="cerrarModal()">Entendido</button>
+    </div>
+  </div>
+}

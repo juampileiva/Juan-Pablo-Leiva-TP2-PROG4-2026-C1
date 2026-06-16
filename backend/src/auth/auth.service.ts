@@ -1,54 +1,76 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
-import { RegisterAuthDto } from './dto/register-auth.dto';
-import { LoginAuthDto } from './dto/login-auth.dto';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { RegisterDto } from './dto/register.dto';
+import { LoginDto } from './dto/login.dto';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+  ) {}
 
-  async register(registerDto: RegisterAuthDto, imagePath: string) {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(registerDto.contrasena, salt);
+  async register(dto: RegisterDto, imagenPerfilUrl: string | null) {
+    const passwordEncriptada = await bcrypt.hash(dto.password, 10);
 
-    const userData = {
-      nombre: registerDto.nombre,
-      apellido: registerDto.apellido,
-      correo: registerDto.correo,
-      nombreUsuario: registerDto.nombreUsuario,
-      contrasena: hashedPassword,
-      fechaNacimiento: registerDto.fechaNacimiento,
-      descripcionBreve: registerDto.descripcionBreve,
-      imagenPerfil: imagePath,
-      perfil: 'usuario',
-      activo: true,
+    const usuario = await this.usersService.create({
+      ...dto,
+      correo: dto.correo.toLowerCase().trim(),
+      nombreUsuario: dto.nombreUsuario.toLowerCase().trim(),
+      password: passwordEncriptada,
+      imagenPerfilUrl,
+      perfil: dto.perfil ?? 'usuario',
+    });
+
+    const usuarioPublico = this.usersService.toPublicUser(usuario);
+    const token = await this.generarToken(usuarioPublico);
+
+    return {
+      message: 'Usuario registrado correctamente.',
+      user: usuarioPublico,
+      token,
     };
-
-    const newUser = await this.usersService.create(userData);
-
-    const userObject = newUser.toObject();
-    delete userObject.contrasena;
-    
-    return userObject;
   }
 
-  async login(loginDto: LoginAuthDto) {
-    const user = await this.usersService.findOneByIdentifier(loginDto.identificador);
-    
-    if (!user) {
-      throw new UnauthorizedException('Credenciales inválidas.');
+  async login(dto: LoginDto) {
+    const usuario = await this.usersService.findByCorreoOrNombreUsuario(dto.identificador);
+
+    if (!usuario) {
+      throw new UnauthorizedException('Usuario o contraseña incorrectos.');
     }
 
-    const isPasswordMatching = await bcrypt.compare(loginDto.contrasena, user.contrasena);
-    
-    if (!isPasswordMatching) {
-      throw new UnauthorizedException('Credenciales inválidas.');
+    if (!usuario.activo) {
+      throw new UnauthorizedException('El usuario se encuentra deshabilitado.');
     }
 
-    const userObject = user.toObject();
-    delete userObject.contrasena;
-    
-    return userObject;
+    const passwordCorrecta = await bcrypt.compare(dto.password, usuario.password);
+
+    if (!passwordCorrecta) {
+      throw new UnauthorizedException('Usuario o contraseña incorrectos.');
+    }
+
+    const usuarioPublico = this.usersService.toPublicUser(usuario);
+    const token = await this.generarToken(usuarioPublico);
+
+    return {
+      message: 'Login correcto.',
+      user: usuarioPublico,
+      token,
+    };
+  }
+
+  private async generarToken(usuario: any): Promise<string> {
+    if (!usuario?.id || !usuario?.correo || !usuario?.nombreUsuario || !usuario?.perfil) {
+      throw new BadRequestException('No se pudo generar el token del usuario.');
+    }
+
+    return this.jwtService.signAsync({
+      sub: usuario.id,
+      correo: usuario.correo,
+      nombreUsuario: usuario.nombreUsuario,
+      perfil: usuario.perfil,
+    });
   }
 }

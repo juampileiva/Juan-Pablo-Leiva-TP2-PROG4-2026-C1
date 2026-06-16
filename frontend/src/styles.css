@@ -1,3 +1,230 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --text: #0f172a;
+  --muted: #64748b;
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --danger: #dc2626;
+  --success: #15803d;
+  --border: #e2e8f0;
+}
 
-@import 'tailwindcss';
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.18), transparent 32rem),
+    radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.18), transparent 32rem),
+    var(--bg);
+}
+
+h1, h2, p {
+  margin-top: 0;
+}
+
+a {
+  color: var(--primary);
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+  padding: 28px;
+}
+
+.wide-card {
+  width: min(900px, 100%);
+  margin: 0 auto;
+}
+
+.auth-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: stretch;
+}
+
+.hero-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 44px;
+  border-radius: 30px;
+  color: white;
+  background: linear-gradient(135deg, #0f172a, #1d4ed8);
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.2);
+}
+
+.form-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.grid-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-weight: 700;
+}
+
+input, textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 13px 14px;
+  font: inherit;
+  outline: none;
+  background: white;
+}
+
+input:focus, textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+small {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border: 0;
+  border-radius: 14px;
+  padding: 12px 18px;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-primary {
+  color: white;
+  background: var(--primary);
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-light {
+  color: #0f172a;
+  background: #e2e8f0;
+}
+
+.modal-message {
+  border-radius: 16px;
+  padding: 14px 16px;
+  font-weight: 700;
+}
+
+.modal-message.error {
+  color: #7f1d1d;
+  background: #fee2e2;
+}
+
+.modal-message.success {
+  color: #14532d;
+  background: #dcfce7;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.eyebrow {
+  color: #2563eb;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.section-heading {
+  margin-bottom: 24px;
+}
+
+.role-box {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 16px;
+}
+
+.radio-line {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin-right: 20px;
+}
+
+.post-list {
+  display: grid;
+  gap: 18px;
+}
+
+.post-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.post-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.profile-card {
+  display: grid;
+  grid-template-columns: 170px 1fr;
+  gap: 28px;
+  align-items: center;
+}
+
+.avatar {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 6px solid #dbeafe;
+}
+
+.empty-state {
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .auth-layout, .grid-form, .profile-card {
+    grid-template-columns: 1fr;
+  }
+
+  .post-card {
+    flex-direction: column;
+  }
+}

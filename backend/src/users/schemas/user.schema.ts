@@ -1,7 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { HydratedDocument } from 'mongoose';
 
-export type UserDocument = User & Document;
+export type UserDocument = HydratedDocument<User>;
+
+export type UserRole = 'usuario' | 'administrador';
 
 @Schema({ timestamps: true })
 export class User {
@@ -14,23 +16,27 @@ export class User {
   @Prop({ required: true, unique: true, lowercase: true, trim: true })
   correo!: string;
 
-  @Prop({ required: true, unique: true, trim: true })
+  @Prop({ required: true, unique: true, lowercase: true, trim: true })
   nombreUsuario!: string;
 
   @Prop({ required: true })
-  contrasena!: string;
+  password!: string;
 
   @Prop({ required: true })
-  fechaNacimiento!: Date;
+  fechaNacimiento!: string;
 
-  @Prop({ trim: true, maxlength: 250 })
-  descripcionBreve?: string;
+  @Prop({ required: true, trim: true })
+  descripcionBreve!: string;
 
-  @Prop({ default: '' })
-  imagenPerfil!: string;
+  @Prop({
+    required: true,
+    enum: ['usuario', 'administrador'],
+    default: 'usuario',
+  })
+  perfil!: UserRole;
 
-  @Prop({ default: 'usuario', enum: ['usuario', 'administrador'] })
-  perfil!: string;
+  @Prop({ type: String, default: null })
+  imagenPerfilUrl!: string | null;
 
   @Prop({ default: true })
   activo!: boolean;

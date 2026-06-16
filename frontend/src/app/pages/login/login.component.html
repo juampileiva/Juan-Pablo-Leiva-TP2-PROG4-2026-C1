@@ -1,0 +1,45 @@
+<section class="auth-card">
+  <h1>Iniciar sesión</h1>
+  <p class="subtitulo">Entrá a tu cuenta para ver las publicaciones.</p>
+
+  <form [formGroup]="form" (ngSubmit)="login()">
+    <div class="campo">
+      <label for="identificador">Correo o nombre de usuario</label>
+      <input id="identificador" type="text" formControlName="identificador" />
+
+      @if (form.controls.identificador.touched && form.controls.identificador.invalid) {
+        <small class="error">Ingresá tu correo o nombre de usuario.</small>
+      }
+    </div>
+
+    <div class="campo">
+      <label for="password">Contraseña</label>
+      <input id="password" type="password" formControlName="password" />
+
+      @if (form.controls.password.touched && form.controls.password.invalid) {
+        <small class="error">
+          La contraseña debe tener mínimo 8 caracteres, una mayúscula y un número.
+        </small>
+      }
+    </div>
+
+    <button class="btn-principal" type="submit" [disabled]="cargando">
+      {{ cargando ? 'Ingresando...' : 'Ingresar' }}
+    </button>
+  </form>
+
+  <p class="link">
+    ¿No tenés cuenta?
+    <a routerLink="/registro">Registrate</a>
+  </p>
+</section>
+
+@if (modalMensaje) {
+  <div class="modal-fondo">
+    <div class="modal-contenido">
+      <h3>Mensaje</h3>
+      <p>{{ modalMensaje }}</p>
+      <button type="button" class="btn-principal" (click)="cerrarModal()">Entendido</button>
+    </div>
+  </div>
+}

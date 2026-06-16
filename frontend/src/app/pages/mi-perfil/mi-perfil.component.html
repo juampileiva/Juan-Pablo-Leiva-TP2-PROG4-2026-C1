@@ -1,0 +1,24 @@
+<section class="section-heading">
+  <p class="eyebrow">Cuenta</p>
+  <h1>Mi Perfil</h1>
+</section>
+
+@if (authService.usuarioActual(); as usuario) {
+  <article class="card profile-card">
+    <img class="avatar" [src]="authService.getImagenPerfilUrl(usuario)" alt="Imagen de perfil" />
+
+    <div>
+      <h2>{{ usuario.nombre }} {{ usuario.apellido }}</h2>
+      <p class="muted">@{{ usuario.nombreUsuario }} · {{ usuario.perfil }}</p>
+      <p><strong>Correo:</strong> {{ usuario.correo }}</p>
+      <p><strong>Fecha de nacimiento:</strong> {{ usuario.fechaNacimiento }}</p>
+      <p><strong>Descripción:</strong> {{ usuario.descripcionBreve }}</p>
+    </div>
+  </article>
+} @else {
+  <article class="card empty-state">
+    <h2>No hay usuario logueado</h2>
+    <p>Ingresá o registrate para ver tu perfil.</p>
+    <a class="btn btn-primary" routerLink="/login">Ir al login</a>
+  </article>
+}

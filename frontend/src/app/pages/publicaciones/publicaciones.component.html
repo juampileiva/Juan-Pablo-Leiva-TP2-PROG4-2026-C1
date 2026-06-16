@@ -1,0 +1,21 @@
+<section class="section-heading">
+  <p class="eyebrow">Feed</p>
+  <h1>Publicaciones</h1>
+  <p>Pantalla pedida en Sprint 1. La lógica completa de publicaciones se implementa en Sprint 2.</p>
+</section>
+
+<div class="post-list">
+  @for (publicacion of publicaciones; track publicacion.titulo) {
+    <article class="card post-card">
+      <div>
+        <p class="muted">Publicado por {{ publicacion.autor }}</p>
+        <h2>{{ publicacion.titulo }}</h2>
+        <p>{{ publicacion.mensaje }}</p>
+      </div>
+      <div class="post-actions">
+        <button class="btn btn-light" type="button">Me gusta</button>
+        <button class="btn btn-light" type="button">Comentar</button>
+      </div>
+    </article>
+  }
+</div>
