@@ -1,0 +1,74 @@
+﻿<div class="page-container">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-7 col-lg-5">
+      <div class="card card-custom mt-5">
+        <div class="card-body p-4 p-md-5">
+          <div class="mb-4">
+            <h1 class="page-title h2 mb-2">Iniciar sesión</h1>
+            <p class="page-subtitle mb-0">
+              Accedé con tu correo electrónico o nombre de usuario.
+            </p>
+          </div>
+
+          <form [formGroup]="form" (ngSubmit)="ingresar()">
+            <div class="mb-3">
+              <label class="form-label">Correo electrónico o nombre de usuario</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="usuarioOCorreo"
+                placeholder="Ejemplo: juan@test.com o juanleiva"
+              />
+              <div class="text-help">
+                Podés ingresar con el correo electrónico o con el nombre de usuario registrado.
+              </div>
+
+              <div
+                class="text-error"
+                *ngIf="form.controls.usuarioOCorreo.touched && form.controls.usuarioOCorreo.invalid"
+              >
+                Este campo es obligatorio para iniciar sesión.
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label">Contraseña</label>
+              <input
+                type="password"
+                class="form-control"
+                formControlName="password"
+                placeholder="Ingresá tu contraseña"
+              />
+              <div class="text-help">
+                La contraseña debe coincidir con la utilizada durante el registro.
+              </div>
+
+              <div
+                class="text-error"
+                *ngIf="form.controls.password.touched && form.controls.password.invalid"
+              >
+                La contraseña es obligatoria para iniciar sesión.
+              </div>
+            </div>
+
+            <div class="alert alert-danger" *ngIf="mensajeError">
+              {{ mensajeError }}
+            </div>
+
+            <div class="alert alert-success" *ngIf="mensajeOk">
+              {{ mensajeOk }}
+            </div>
+
+            <button class="btn btn-primary w-100" type="submit" [disabled]="cargando">
+              {{ cargando ? 'Validando datos...' : 'Ingresar' }}
+            </button>
+          </form>
+
+          <div class="text-center mt-4">
+            <a routerLink="/registro">No tengo cuenta, crear una cuenta</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

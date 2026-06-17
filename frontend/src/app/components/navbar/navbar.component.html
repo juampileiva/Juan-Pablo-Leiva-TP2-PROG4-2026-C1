@@ -1,0 +1,44 @@
+﻿<nav class="navbar-custom">
+  <div class="navbar-content">
+    <a class="brand" routerLink="/publicaciones" (click)="cerrarMenu()">
+      <span class="brand-icon">RS</span>
+      <span class="brand-text">
+        <strong>Red Social</strong>
+        <small>TP2 Programación IV</small>
+      </span>
+    </a>
+
+    <button class="menu-button" type="button" (click)="alternarMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <div class="links" [class.links-open]="menuAbierto">
+      <a routerLink="/login" routerLinkActive="active" (click)="cerrarMenu()">
+        Login
+      </a>
+
+      <a routerLink="/registro" routerLinkActive="active" (click)="cerrarMenu()">
+        Registro
+      </a>
+
+      <a routerLink="/publicaciones" routerLinkActive="active" (click)="cerrarMenu()">
+        Publicaciones
+      </a>
+
+      <a routerLink="/mi-perfil" routerLinkActive="active" (click)="cerrarMenu()">
+        Mi Perfil
+      </a>
+
+      <button
+        class="logout-button"
+        type="button"
+        *ngIf="authService.obtenerUsuario()"
+        (click)="cerrarSesion()"
+      >
+        Cerrar sesión
+      </button>
+    </div>
+  </div>
+</nav>

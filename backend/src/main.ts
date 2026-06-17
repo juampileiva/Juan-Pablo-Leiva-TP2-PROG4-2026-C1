@@ -1,22 +1,33 @@
-import { ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+﻿import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // Habilitamos CORS para que Angular pueda comunicarse con NestJS
-  app.enableCors();
+  app.enableCors({
+    origin: true,
+    credentials: true,
+  });
 
-  // Configuración global de validaciones (DTOs)
+  app.useStaticAssets(join(process.cwd(), 'uploads'), {
+    prefix: '/uploads',
+  });
+
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true, // Ignora datos extra que mande el usuario y no estén en el DTO
-      forbidNonWhitelisted: true, // Tira error si mandan datos maliciosos no definidos
-      transform: true, // Transforma los tipos de datos (ej: string a Date)
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
     }),
   );
 
-  await app.listen(3000);
+  const port = process.env.PORT || 3000;
+  await app.listen(port);
+
+  console.log(`Servidor corriendo en http://localhost:${port}`);
 }
+
 bootstrap();

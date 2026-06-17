@@ -1,0 +1,12 @@
+@if (mensaje) {
+  <div class="modal-fondo">
+    <div class="modal-contenido">
+      <h3>Mensaje</h3>
+      <p>{{ mensaje }}</p>
+
+      <button type="button" class="btn-principal" (click)="cerrar.emit()">
+        Entendido
+      </button>
+    </div>
+  </div>
+}

@@ -1,20 +1,25 @@
-import { Module } from '@nestjs/common';
+﻿import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-import { PublicationsModule } from './publications/publications.module';
+import { UsuariosModule } from './usuarios/usuarios.module';
+import { PublicacionesModule } from './publicaciones/publicaciones.module';
 
 @Module({
   imports: [
-    // Conexión principal a la base de datos MongoDB local
-    MongooseModule.forRoot('mongodb://127.0.0.1:27017/red-social-db'),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGODB_URI'),
+      }),
+    }),
     AuthModule,
-    UsersModule,
-    PublicationsModule,
+    UsuariosModule,
+    PublicacionesModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

@@ -1,0 +1,66 @@
+﻿<div class="page-container">
+  <div class="card card-custom" *ngIf="usuario; else sinUsuario">
+    <div class="card-body p-4">
+      <div class="d-flex flex-column flex-md-row gap-4 align-items-center align-items-md-start">
+        <img
+          *ngIf="usuario.fotoPerfilUrl"
+          [src]="usuario.fotoPerfilUrl"
+          class="foto-perfil"
+          alt="Foto de perfil"
+        />
+
+        <div class="foto-perfil placeholder-img" *ngIf="!usuario.fotoPerfilUrl">
+          {{ usuario.nombre.charAt(0) }}{{ usuario.apellido.charAt(0) }}
+        </div>
+
+        <div class="flex-grow-1">
+          <h1 class="h3 fw-bold mb-1">
+            {{ usuario.nombre }} {{ usuario.apellido }}
+          </h1>
+
+          <p class="text-muted mb-3">
+            @{{ usuario.nombreUsuario }}
+          </p>
+
+          <p class="mb-3">
+            {{ usuario.descripcionBreve }}
+          </p>
+
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <strong>Correo:</strong>
+              <div>{{ usuario.correo }}</div>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <strong>Fecha de nacimiento:</strong>
+              <div>{{ usuario.fechaNacimiento }}</div>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <strong>Perfil:</strong>
+              <div class="badge bg-primary">{{ usuario.perfil }}</div>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <strong>Estado:</strong>
+              <div class="badge bg-success" *ngIf="usuario.activo">Activo</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #sinUsuario>
+    <div class="card card-custom">
+      <div class="card-body text-center p-5">
+        <h1 class="h4 fw-bold">No hay usuario logueado</h1>
+        <p class="text-muted">
+          Iniciá sesión para ver los datos de tu perfil.
+        </p>
+        <a routerLink="/login" class="btn btn-primary">Ir al login</a>
+      </div>
+    </div>
+  </ng-template>
+</div>
