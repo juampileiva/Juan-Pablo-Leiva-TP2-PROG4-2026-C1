@@ -18,15 +18,19 @@ export class NavbarComponent {
     private router: Router,
   ) {}
 
-  alternarMenu() {
+  alternarMenu(): void {
     this.menuAbierto = !this.menuAbierto;
   }
 
-  cerrarMenu() {
+  cerrarMenu(): void {
     this.menuAbierto = false;
   }
 
-  cerrarSesion() {
+  estaLogueado(): boolean {
+    return this.authService.obtenerUsuario() !== null;
+  }
+
+  cerrarSesion(): void {
     this.authService.cerrarSesion();
     this.menuAbierto = false;
     this.router.navigateByUrl('/login');
