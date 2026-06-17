@@ -8,10 +8,11 @@ export const authGuard: CanActivateFn = () => {
 
   const usuario = authService.obtenerUsuario();
 
-  if (usuario) {
+  if (usuario && usuario.correo) {
     return true;
   }
 
-  router.navigate(['/login']);
+  authService.cerrarSesion();
+  router.navigateByUrl('/login');
   return false;
 };
