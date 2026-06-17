@@ -1,12 +1,4 @@
-node_modules/
-.angular/
+﻿node_modules/
 dist/
 .env
-*.log
-
-backend/node_modules/
-backend/dist/
-
-frontend/node_modules/
-frontend/.angular/
-frontend/dist/
+.DS_Store

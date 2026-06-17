@@ -1,33 +1,14 @@
-import { Routes } from '@angular/router';
+﻿import { Routes } from '@angular/router';
 import { LoginComponent } from './pages/login/login.component';
 import { RegistroComponent } from './pages/registro/registro.component';
 import { PublicacionesComponent } from './pages/publicaciones/publicaciones.component';
 import { MiPerfilComponent } from './pages/mi-perfil/mi-perfil.component';
 
 export const routes: Routes = [
-  {
-    path: '',
-    redirectTo: 'publicaciones',
-    pathMatch: 'full',
-  },
-  {
-    path: 'login',
-    component: LoginComponent,
-  },
-  {
-    path: 'registro',
-    component: RegistroComponent,
-  },
-  {
-    path: 'publicaciones',
-    component: PublicacionesComponent,
-  },
-  {
-    path: 'mi-perfil',
-    component: MiPerfilComponent,
-  },
-  {
-    path: '**',
-    redirectTo: 'publicaciones',
-  },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
+  { path: 'registro', component: RegistroComponent },
+  { path: 'publicaciones', component: PublicacionesComponent },
+  { path: 'mi-perfil', component: MiPerfilComponent },
+  { path: '**', redirectTo: 'login' },
 ];

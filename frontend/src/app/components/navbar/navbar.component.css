@@ -1,0 +1,137 @@
+﻿.navbar-custom {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(15, 23, 42, 0.94);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.navbar-content {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #38bdf8, #2563eb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  color: white;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.brand-text strong {
+  font-size: 1rem;
+}
+
+.brand-text small {
+  color: #cbd5e1;
+  font-size: 0.78rem;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.links a {
+  color: #dbeafe;
+  text-decoration: none;
+  padding: 9px 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  transition: 0.2s;
+}
+
+.links a:hover,
+.links a.active {
+  color: white;
+  background: rgba(59, 130, 246, 0.22);
+}
+
+.logout-button {
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: transparent;
+  color: white;
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-weight: 700;
+}
+
+.logout-button:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.menu-button {
+  display: none;
+  width: 44px;
+  height: 40px;
+  border: 0;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.12);
+  padding: 8px;
+}
+
+.menu-button span {
+  display: block;
+  height: 2px;
+  background: white;
+  margin: 5px 0;
+  border-radius: 99px;
+}
+
+@media (max-width: 768px) {
+  .navbar-content {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .menu-button {
+    display: block;
+  }
+
+  .links {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    margin-top: 14px;
+    padding: 12px;
+    background: rgba(30, 41, 59, 0.92);
+    border-radius: 18px;
+  }
+
+  .links.links-open {
+    display: flex;
+  }
+
+  .links a,
+  .logout-button {
+    width: 100%;
+    text-align: left;
+  }
+}

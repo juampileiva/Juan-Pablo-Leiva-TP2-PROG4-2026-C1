@@ -1,18 +1,12 @@
-import { Component } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
-import { AuthService } from './services/auth.service';
+﻿import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { NavbarComponent } from './components/navbar/navbar.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink],
+  imports: [RouterOutlet, NavbarComponent],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App {
-  constructor(public readonly authService: AuthService) {}
-
-  cerrarSesion(): void {
-    this.authService.logout();
-  }
-}
+export class App {}

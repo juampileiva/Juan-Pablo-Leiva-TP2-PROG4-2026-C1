@@ -1,9 +1,15 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+﻿import {
+  Body,
+  Controller,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { AuthService } from './auth.service';
-import { RegisterDto } from './dto/register.dto';
+import { RegistroDto } from './dto/registro.dto';
 import { LoginDto } from './dto/login.dto';
 
 @Controller('auth')
@@ -12,31 +18,43 @@ export class AuthController {
 
   @Post('registro')
   @UseInterceptors(
-    FileInterceptor('imagenPerfil', {
+    FileInterceptor('fotoPerfil', {
       storage: diskStorage({
         destination: './uploads/perfiles',
-        filename: (_req, file, callback) => {
-          const nombreArchivo = `${Date.now()}-${Math.round(Math.random() * 1e9)}${extname(file.originalname)}`;
-          callback(null, nombreArchivo);
+        filename: (req, file, callback) => {
+          const nombreUnico =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const extension = extname(file.originalname);
+          callback(null, `perfil-${nombreUnico}${extension}`);
         },
       }),
-      fileFilter: (_req, file, callback) => {
-        if (!file.mimetype.match(/^image\/(jpg|jpeg|png|webp)$/)) {
-          return callback(new Error('Solo se permiten imágenes JPG, PNG o WEBP.'), false);
+      fileFilter: (req, file, callback) => {
+        if (!file.mimetype.match(/\/(jpg|jpeg|png|webp)$/)) {
+          return callback(
+            new Error('Solo se permiten imágenes JPG, JPEG, PNG o WEBP.'),
+            false,
+          );
         }
+
         callback(null, true);
       },
-      limits: { fileSize: 2 * 1024 * 1024 },
     }),
   )
-  async register(@Body() dto: RegisterDto, @UploadedFile() file?: any) {
-    const imagenPerfilUrl = file ? `/uploads/perfiles/${file.filename}` : null;
-    return this.authService.register(dto, imagenPerfilUrl);
+  async registro(
+    @Body() registroDto: RegistroDto,
+    @UploadedFile() fotoPerfil?: Express.Multer.File,
+  ) {
+    const baseUrl = process.env.UPLOADS_URL || 'http://localhost:3000/uploads';
+
+    const fotoPerfilUrl = fotoPerfil
+      ? `${baseUrl}/perfiles/${fotoPerfil.filename}`
+      : '';
+
+    return this.authService.registro(registroDto, fotoPerfilUrl);
   }
 
   @Post('login')
-  @HttpCode(HttpStatus.OK)
-  async login(@Body() dto: LoginDto) {
-    return this.authService.login(dto);
+  async login(@Body() loginDto: LoginDto) {
+    return this.authService.login(loginDto);
   }
 }

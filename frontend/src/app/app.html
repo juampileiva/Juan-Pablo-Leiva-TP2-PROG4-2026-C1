@@ -1,21 +1,2 @@
-<h1 style="color: red; padding: 40px;">ANGULAR FUNCIONA</h1>
-
-<header class="navbar">
-  <a routerLink="/publicaciones" class="logo">Red Social TP2</a>
-
-  <nav>
-    <a routerLink="/publicaciones">Publicaciones</a>
-    <a routerLink="/mi-perfil">Mi perfil</a>
-
-    @if (authService.usuarioActual()) {
-      <button type="button" (click)="cerrarSesion()">Cerrar sesión</button>
-    } @else {
-      <a routerLink="/login">Login</a>
-      <a routerLink="/registro">Registro</a>
-    }
-  </nav>
-</header>
-
-<main class="contenedor">
-  <router-outlet></router-outlet>
-</main>
+﻿<app-navbar></app-navbar>
+<router-outlet></router-outlet>

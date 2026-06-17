@@ -1,12 +1,21 @@
-import { Component } from '@angular/core';
+﻿import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService, Usuario } from '../../services/auth.service';
 
 @Component({
   selector: 'app-mi-perfil',
-  imports: [RouterLink],
+  standalone: true,
+  imports: [CommonModule, RouterLink],
   templateUrl: './mi-perfil.component.html',
+  styleUrl: './mi-perfil.component.css',
 })
-export class MiPerfilComponent {
-  constructor(public readonly authService: AuthService) {}
+export class MiPerfilComponent implements OnInit {
+  usuario: Usuario | null = null;
+
+  constructor(private authService: AuthService) {}
+
+  ngOnInit(): void {
+    this.usuario = this.authService.obtenerUsuario();
+  }
 }

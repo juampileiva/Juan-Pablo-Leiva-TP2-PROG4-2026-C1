@@ -1,6 +1,6 @@
+﻿import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Injectable, signal } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 
 export interface Usuario {
   id: string;
@@ -10,75 +10,37 @@ export interface Usuario {
   nombreUsuario: string;
   fechaNacimiento: string;
   descripcionBreve: string;
+  fotoPerfilUrl: string;
   perfil: 'usuario' | 'administrador';
-  imagenPerfilUrl?: string | null;
-  activo?: boolean;
-}
-
-export interface AuthResponse {
-  message: string;
-  usuario: Usuario;
+  activo: boolean;
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly apiUrl = 'http://localhost:3000/auth';
+  private apiUrl = 'http://localhost:3000';
 
-  usuarioActual = signal<Usuario | null>(this.obtenerUsuario());
+  constructor(private http: HttpClient) {}
 
-  constructor(private readonly http: HttpClient) {}
-
-  register(formData: FormData): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/registro`, formData).pipe(
-      tap((respuesta) => {
-        this.guardarUsuario(respuesta.usuario);
-      }),
-    );
+  registrar(data: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/registro`, data);
   }
 
-  login(identificador: string, password: string): Observable<AuthResponse> {
-    return this.http
-      .post<AuthResponse>(`${this.apiUrl}/login`, {
-        identificador,
-        password,
-      })
-      .pipe(
-        tap((respuesta) => {
-          this.guardarUsuario(respuesta.usuario);
-        }),
-      );
+  login(data: { usuarioOCorreo: string; password: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/login`, data);
   }
 
   guardarUsuario(usuario: Usuario): void {
     localStorage.setItem('usuario', JSON.stringify(usuario));
-    this.usuarioActual.set(usuario);
   }
 
   obtenerUsuario(): Usuario | null {
-    const usuarioGuardado = localStorage.getItem('usuario');
-    return usuarioGuardado ? JSON.parse(usuarioGuardado) : null;
+    const usuario = localStorage.getItem('usuario');
+    return usuario ? JSON.parse(usuario) : null;
   }
 
   cerrarSesion(): void {
     localStorage.removeItem('usuario');
-    this.usuarioActual.set(null);
-  }
-
-  logout(): void {
-    this.cerrarSesion();
-  }
-
-  getImagenPerfilUrl(usuario: Usuario): string {
-    if (usuario.imagenPerfilUrl) {
-      if (usuario.imagenPerfilUrl.startsWith('http')) {
-        return usuario.imagenPerfilUrl;
-      }
-
-      return `http://localhost:3000${usuario.imagenPerfilUrl}`;
-    }
-
-    return 'https://ui-avatars.com/api/?name=' + encodeURIComponent(`${usuario.nombre} ${usuario.apellido}`);
   }
 }

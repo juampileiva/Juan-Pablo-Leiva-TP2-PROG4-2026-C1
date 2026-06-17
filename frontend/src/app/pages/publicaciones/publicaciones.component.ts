@@ -1,20 +1,26 @@
+﻿import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-publicaciones',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './publicaciones.component.html',
+  styleUrl: './publicaciones.component.css',
 })
 export class PublicacionesComponent {
   publicaciones = [
     {
-      titulo: 'Bienvenido al TP2',
-      mensaje: 'Pantalla Publicaciones creada para Sprint 1. En Sprint 2 se conecta el listado real, likes y paginación.',
+      titulo: 'Bienvenido a la red social',
+      mensaje: 'Esta pantalla queda preparada para listar publicaciones en el Sprint 2.',
       autor: 'Sistema',
+      fecha: new Date(),
     },
     {
-      titulo: 'Diseño uniforme',
-      mensaje: 'La app ya tiene navegación, estilos compartidos y estructura limpia para seguir creciendo.',
-      autor: 'Red Social TP2',
+      titulo: 'Sprint 1',
+      mensaje: 'En este sprint se configura Angular, NestJS, MongoDB, registro y login.',
+      autor: 'Programación IV',
+      fecha: new Date(),
     },
   ];
 }
