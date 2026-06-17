@@ -28,9 +28,7 @@ https://red-social-tp2-frontend.onrender.com/login
 
 https://juan-pablo-leiva-tp2-prog4-2026-c1.onrender.com
 
-Ruta de prueba del backend:
 
-https://juan-pablo-leiva-tp2-prog4-2026-c1.onrender.com/publicaciones
 
 ## Tecnologías utilizadas
 
