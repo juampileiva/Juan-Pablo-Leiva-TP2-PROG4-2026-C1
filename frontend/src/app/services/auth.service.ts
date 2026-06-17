@@ -19,7 +19,10 @@ export interface Usuario {
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000';
+  private apiUrl =
+    window.location.hostname === 'localhost'
+      ? 'http://localhost:3000'
+      : 'https://juan-pablo-leiva-tp2-prog4-2026-c1.onrender.com';
 
   constructor(private http: HttpClient) {}
 
