@@ -1,0 +1,46 @@
+.detalle-page {
+  max-width: 980px;
+}
+
+.publicacion-grande {
+  overflow: hidden;
+}
+
+.autor-foto {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.autor-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e9ecef;
+  font-weight: 700;
+  color: #495057;
+}
+
+.texto-publicacion {
+  white-space: pre-line;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.imagen-detalle {
+  width: 100%;
+  max-height: 520px;
+  object-fit: cover;
+  border-radius: 18px;
+}
+
+.comentario-detalle {
+  border-top: 1px solid #eef0f3;
+  padding: 18px 0;
+}
+
+.comentario-detalle:last-child {
+  border-bottom: 1px solid #eef0f3;
+}

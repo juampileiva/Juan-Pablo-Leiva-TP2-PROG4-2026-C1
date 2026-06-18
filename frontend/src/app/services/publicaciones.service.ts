@@ -3,9 +3,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export interface ComentarioPublicacion {
+  id: string;
+  usuarioId: string;
   nombreUsuario: string;
   mensaje: string;
   fecha: string;
+  modificado: boolean;
+  esMio: boolean;
 }
 
 export interface Publicacion {
@@ -33,6 +37,13 @@ export interface RespuestaListadoPublicaciones {
   offset: number;
   limit: number;
   orden: 'fecha' | 'likes';
+}
+
+export interface RespuestaComentarios {
+  comentarios: ComentarioPublicacion[];
+  total: number;
+  offset: number;
+  limit: number;
 }
 
 @Injectable({
@@ -64,6 +75,13 @@ export class PublicacionesService {
     return this.http.get<RespuestaListadoPublicaciones>(`${this.apiUrl}/publicaciones`, { params });
   }
 
+  obtenerPorId(publicacionId: string, usuarioActualId?: string): Observable<{ publicacion: Publicacion }> {
+    let params = new HttpParams();
+    if (usuarioActualId) params = params.set('usuarioActualId', usuarioActualId);
+
+    return this.http.get<{ publicacion: Publicacion }>(`${this.apiUrl}/publicaciones/${publicacionId}`, { params });
+  }
+
   crear(data: FormData): Observable<{ mensaje: string; publicacion: Publicacion }> {
     return this.http.post<{ mensaje: string; publicacion: Publicacion }>(
       `${this.apiUrl}/publicaciones`,
@@ -89,6 +107,31 @@ export class PublicacionesService {
     return this.http.delete<{ mensaje: string; publicacion: Publicacion }>(
       `${this.apiUrl}/publicaciones/${publicacionId}/me-gusta`,
       { body: { usuarioId } },
+    );
+  }
+
+  listarComentarios(publicacionId: string, offset: number, limit: number): Observable<RespuestaComentarios> {
+    const params = new HttpParams()
+      .set('offset', offset)
+      .set('limit', limit);
+
+    return this.http.get<RespuestaComentarios>(
+      `${this.apiUrl}/publicaciones/${publicacionId}/comentarios`,
+      { params },
+    );
+  }
+
+  agregarComentario(publicacionId: string, mensaje: string): Observable<{ mensaje: string; comentario: ComentarioPublicacion; publicacion: Publicacion }> {
+    return this.http.post<{ mensaje: string; comentario: ComentarioPublicacion; publicacion: Publicacion }>(
+      `${this.apiUrl}/publicaciones/${publicacionId}/comentarios`,
+      { mensaje },
+    );
+  }
+
+  editarComentario(publicacionId: string, comentarioId: string, mensaje: string): Observable<{ mensaje: string; comentario: ComentarioPublicacion }> {
+    return this.http.put<{ mensaje: string; comentario: ComentarioPublicacion }>(
+      `${this.apiUrl}/publicaciones/${publicacionId}/comentarios/${comentarioId}`,
+      { mensaje },
     );
   }
 }

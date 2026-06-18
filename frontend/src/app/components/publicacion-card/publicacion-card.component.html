@@ -47,6 +47,13 @@
         <span class="ms-1">{{ publicacion.cantidadLikes }}</span>
       </button>
 
+      <a
+        class="btn btn-sm btn-outline-secondary"
+        [routerLink]="['/publicaciones', publicacion.id]"
+      >
+        Ver publicación
+      </a>
+
       <button
         type="button"
         class="btn btn-sm btn-outline-danger"

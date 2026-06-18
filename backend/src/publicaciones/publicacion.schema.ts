@@ -16,6 +16,9 @@ export class ComentarioPublicacion {
 
   @Prop({ default: Date.now })
   fecha!: Date;
+
+  @Prop({ default: false })
+  modificado!: boolean;
 }
 
 @Schema({ timestamps: true })

@@ -1,4 +1,4 @@
-﻿import { CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import {
   AbstractControl,
@@ -143,12 +143,13 @@ export class RegistroComponent {
     this.cargando = true;
 
     this.authService.registrar(formData).subscribe({
-      next: () => {
+      next: (res) => {
+        this.authService.guardarSesion(res.usuario, res.token);
         this.mensajeOk =
-          'Usuario registrado correctamente. Redirigiendo al login...';
+          'Usuario registrado correctamente. Redirigiendo...';
 
         setTimeout(() => {
-          this.router.navigateByUrl('/login');
+          this.router.navigateByUrl('/publicaciones');
         }, 900);
       },
       error: (err) => {

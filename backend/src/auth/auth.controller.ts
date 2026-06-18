@@ -1,6 +1,7 @@
-﻿import {
+import {
   Body,
   Controller,
+  Headers,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -11,10 +12,14 @@ import { extname } from 'path';
 import { AuthService } from './auth.service';
 import { RegistroDto } from './dto/registro.dto';
 import { LoginDto } from './dto/login.dto';
+import { TokenService } from './token.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly tokenService: TokenService,
+  ) {}
 
   @Post('registro')
   @UseInterceptors(
@@ -56,5 +61,17 @@ export class AuthController {
   @Post('login')
   async login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
+  }
+
+  @Post('autorizar')
+  async autorizar(@Headers('authorization') authorization: string, @Body('token') tokenBody?: string) {
+    const token = this.tokenService.obtenerTokenDesdeHeader(authorization) || tokenBody || '';
+    return this.authService.autorizar(token);
+  }
+
+  @Post('refrescar')
+  async refrescar(@Headers('authorization') authorization: string, @Body('token') tokenBody?: string) {
+    const token = this.tokenService.obtenerTokenDesdeHeader(authorization) || tokenBody || '';
+    return this.authService.refrescar(token);
   }
 }

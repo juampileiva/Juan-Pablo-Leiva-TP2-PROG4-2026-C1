@@ -8,6 +8,21 @@ import { Usuario, UsuarioDocument } from './usuario.schema';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcryptjs';
 
+export interface UsuarioLimpio {
+  id: string;
+  nombre: string;
+  apellido: string;
+  correo: string;
+  nombreUsuario: string;
+  fechaNacimiento: string;
+  descripcionBreve: string;
+  fotoPerfilUrl: string;
+  perfil: 'usuario' | 'administrador';
+  activo: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
 interface CrearUsuarioParams {
   nombre: string;
   apellido: string;
