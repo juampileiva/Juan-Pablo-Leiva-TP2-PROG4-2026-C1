@@ -1,4 +1,4 @@
-﻿import {
+import {
   BadRequestException,
   Injectable,
   UnauthorizedException,
@@ -60,6 +60,17 @@ export class UsuariosService {
     });
 
     return this.limpiarUsuario(usuarioCreado);
+  }
+
+
+  async buscarPorId(id: string) {
+    const usuario = await this.usuarioModel.findById(id);
+
+    if (!usuario || !usuario.activo) {
+      throw new UnauthorizedException('Usuario no válido.');
+    }
+
+    return this.limpiarUsuario(usuario);
   }
 
   async validarLogin(usuarioOCorreo: string, password: string) {

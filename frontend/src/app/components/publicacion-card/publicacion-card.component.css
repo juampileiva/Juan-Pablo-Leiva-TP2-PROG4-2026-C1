@@ -1,0 +1,45 @@
+.publicacion-card {
+  overflow: hidden;
+}
+
+.autor-foto {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid white;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.16);
+}
+
+.autor-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  color: #1d4ed8;
+  font-weight: 800;
+}
+
+.texto-publicacion {
+  white-space: pre-line;
+}
+
+.imagen-publicacion {
+  width: 100%;
+  max-height: 360px;
+  object-fit: cover;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+}
+
+.comentarios {
+  background: #f8fafc;
+  border-radius: 14px;
+  padding: 12px;
+}
+
+.comentario {
+  font-size: 0.92rem;
+  color: #475569;
+  margin-bottom: 6px;
+}

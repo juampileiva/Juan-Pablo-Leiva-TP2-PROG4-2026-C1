@@ -1,4 +1,4 @@
-﻿<div class="page-container">
+<div class="page-container">
   <div class="card card-custom" *ngIf="usuario; else sinUsuario">
     <div class="card-body p-4">
       <div class="d-flex flex-column flex-md-row gap-4 align-items-center align-items-md-start">
@@ -48,6 +48,49 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4" *ngIf="usuario">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h2 class="h4 fw-bold mb-1">Mis últimas publicaciones</h2>
+        <p class="page-subtitle mb-0">
+          Se muestran las últimas 3 publicaciones con sus comentarios disponibles.
+        </p>
+      </div>
+      <a routerLink="/publicaciones" class="btn btn-outline-primary">Ir a publicaciones</a>
+    </div>
+
+    <div class="alert alert-danger" *ngIf="mensajeError">
+      {{ mensajeError }}
+    </div>
+
+    <div class="alert alert-success" *ngIf="mensajeOk">
+      {{ mensajeOk }}
+    </div>
+
+    <div class="text-center py-4" *ngIf="cargandoPublicaciones">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="text-muted mt-2 mb-0">Cargando publicaciones...</p>
+    </div>
+
+    <div class="card card-custom" *ngIf="!cargandoPublicaciones && publicaciones.length === 0">
+      <div class="card-body p-4 text-center">
+        <h3 class="h5 fw-bold">Todavía no publicaste nada</h3>
+        <p class="text-muted mb-0">Tus publicaciones van a aparecer en esta sección.</p>
+      </div>
+    </div>
+
+    <div class="row g-4" *ngIf="!cargandoPublicaciones && publicaciones.length > 0">
+      <div class="col-12 col-md-6 col-xl-4" *ngFor="let publicacion of publicaciones">
+        <app-publicacion-card
+          [publicacion]="publicacion"
+          [mostrandoPerfil]="true"
+          (cambiarLike)="cambiarLike($event)"
+          (eliminar)="eliminar($event)"
+        ></app-publicacion-card>
       </div>
     </div>
   </div>

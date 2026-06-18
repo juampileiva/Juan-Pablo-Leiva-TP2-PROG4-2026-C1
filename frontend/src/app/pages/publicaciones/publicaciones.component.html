@@ -1,39 +1,167 @@
-﻿<div class="page-container">
+<div class="page-container publicaciones-page">
   <div class="row align-items-center mb-4">
-    <div class="col-12 col-md-8">
+    <div class="col-12 col-lg-7">
       <h1 class="page-title h2 mb-2">Publicaciones</h1>
       <p class="page-subtitle mb-0">
-        Espacio principal de la red social. En el siguiente sprint se agregan publicaciones reales, me gusta, paginación y baja lógica.
+        Mirá las publicaciones de la red social y compartí algo cuando quieras.
       </p>
     </div>
 
-    <div class="col-12 col-md-4 text-md-end mt-3 mt-md-0">
-      <span class="badge bg-primary p-3 rounded-pill">Sprint 1</span>
+    <div class="col-12 col-lg-5 mt-3 mt-lg-0">
+      <div class="acciones-publicaciones">
+        <button class="btn btn-primary" type="button" (click)="abrirModalPublicacion()">
+          Agregar publicación
+        </button>
+
+        <div class="btn-group">
+          <button
+            type="button"
+            class="btn btn-sm"
+            [ngClass]="orden === 'fecha' ? 'btn-primary' : 'btn-outline-primary'"
+            (click)="cambiarOrden('fecha')"
+          >
+            Más recientes
+          </button>
+          <button
+            type="button"
+            class="btn btn-sm"
+            [ngClass]="orden === 'likes' ? 'btn-primary' : 'btn-outline-primary'"
+            (click)="cambiarOrden('likes')"
+          >
+            Más gustadas
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="row g-4">
-    <div class="col-12 col-md-6" *ngFor="let publicacion of publicaciones">
-      <div class="card card-custom h-100">
-        <div class="card-body p-4">
-          <div class="d-flex justify-content-between align-items-start mb-3">
-            <div>
-              <h2 class="h4 fw-bold mb-1">{{ publicacion.titulo }}</h2>
-              <small class="text-muted">Publicado por {{ publicacion.autor }}</small>
-            </div>
-            <span class="badge bg-light text-primary border">Demo</span>
-          </div>
+  <div class="alert alert-danger" *ngIf="mensajeError && !modalPublicacionAbierto">
+    {{ mensajeError }}
+  </div>
 
-          <p class="mb-4">
-            {{ publicacion.mensaje }}
-          </p>
+  <div class="alert alert-success" *ngIf="mensajeOk && !modalPublicacionAbierto">
+    {{ mensajeOk }}
+  </div>
 
-          <div class="d-flex justify-content-between align-items-center text-muted small">
-            <span>{{ publicacion.fecha | date: 'dd/MM/yyyy HH:mm' }}</span>
-            <span>Me gusta y comentarios disponibles en Sprint 2</span>
+  <section class="feed-publicaciones">
+    <div class="text-center py-5" *ngIf="cargando">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="text-muted mt-2 mb-0">Cargando publicaciones...</p>
+    </div>
+
+    <div class="card card-custom" *ngIf="!cargando && publicaciones.length === 0">
+      <div class="card-body p-5 text-center">
+        <h2 class="h5 fw-bold">Todavía no hay publicaciones</h2>
+        <p class="text-muted mb-3">Cuando alguien publique, va a aparecer acá.</p>
+        <button class="btn btn-primary" type="button" (click)="abrirModalPublicacion()">
+          Crear primera publicación
+        </button>
+      </div>
+    </div>
+
+    <div class="row g-4" *ngIf="!cargando && publicaciones.length > 0">
+      <div class="col-12 col-md-6 col-xl-4" *ngFor="let publicacion of publicaciones">
+        <app-publicacion-card
+          [publicacion]="publicacion"
+          (cambiarLike)="cambiarLike($event)"
+          (eliminar)="eliminar($event)"
+        ></app-publicacion-card>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-4" *ngIf="total > limit">
+      <button class="btn btn-outline-primary" type="button" (click)="paginaAnterior()" [disabled]="pagina === 0">
+        Anterior
+      </button>
+
+      <span class="text-muted">
+        Página {{ pagina + 1 }} de {{ totalPaginas }}
+      </span>
+
+      <button
+        class="btn btn-outline-primary"
+        type="button"
+        (click)="paginaSiguiente()"
+        [disabled]="(pagina + 1) * limit >= total"
+      >
+        Siguiente
+      </button>
+    </div>
+  </section>
+
+  <div class="modal-publicacion-backdrop" *ngIf="modalPublicacionAbierto">
+    <div class="modal-publicacion">
+      <div class="modal-publicacion-header">
+        <div>
+          <h2 class="h5 fw-bold mb-1">Agregar publicación</h2>
+          <p class="text-muted mb-0">Completá los datos para compartir una publicación.</p>
+        </div>
+
+        <button class="btn-cerrar-modal" type="button" (click)="cerrarModalPublicacion()" aria-label="Cerrar">
+          ×
+        </button>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="crearPublicacion()">
+        <div class="mb-3">
+          <label class="form-label">Título</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="titulo"
+            placeholder="Ejemplo: Mi primera publicación"
+          />
+          <div class="text-help">Máximo 80 caracteres.</div>
+          <div class="text-error" *ngIf="form.controls.titulo.touched && form.controls.titulo.invalid">
+            El título es obligatorio y no puede superar los 80 caracteres.
           </div>
         </div>
-      </div>
+
+        <div class="mb-3">
+          <label class="form-label">Descripción</label>
+          <textarea
+            class="form-control"
+            rows="4"
+            formControlName="descripcion"
+            placeholder="Escribí el contenido de la publicación"
+          ></textarea>
+          <div class="text-help">Máximo 600 caracteres.</div>
+          <div class="text-error" *ngIf="form.controls.descripcion.touched && form.controls.descripcion.invalid">
+            La descripción es obligatoria y no puede superar los 600 caracteres.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Imagen opcional</label>
+          <input
+            type="file"
+            class="form-control"
+            accept="image/png, image/jpeg, image/webp"
+            (change)="seleccionarImagen($event)"
+          />
+          <div class="text-help">Formatos permitidos: JPG, JPEG, PNG o WEBP.</div>
+        </div>
+
+        <img
+          *ngIf="vistaPreviaImagen"
+          [src]="vistaPreviaImagen"
+          class="preview-publicacion mb-3"
+          alt="Vista previa"
+        />
+
+        <div class="alert alert-danger" *ngIf="mensajeError">
+          {{ mensajeError }}
+        </div>
+
+        <div class="modal-publicacion-footer">
+          <button class="btn btn-outline-secondary" type="button" (click)="cerrarModalPublicacion()" [disabled]="guardando">
+            Cancelar
+          </button>
+          <button class="btn btn-primary" type="submit" [disabled]="guardando">
+            {{ guardando ? 'Publicando...' : 'Publicar' }}
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
