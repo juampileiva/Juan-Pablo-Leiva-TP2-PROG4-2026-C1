@@ -139,3 +139,8 @@ body {
 .rule-bad {
   color: var(--color-suave);
 }
+
+.elemento-propio {
+  border-left: 4px solid #2f6f55 !important;
+  background: #f7fbf8;
+}

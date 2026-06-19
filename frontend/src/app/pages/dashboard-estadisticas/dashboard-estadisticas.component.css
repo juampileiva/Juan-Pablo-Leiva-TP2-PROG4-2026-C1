@@ -1,0 +1,62 @@
+.filtros-fecha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px;
+}
+
+.filtros-fecha label {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.barra-item {
+  margin-bottom: 14px;
+}
+
+.barra-base {
+  height: 12px;
+  border-radius: 999px;
+  background: #eef2f7;
+  overflow: hidden;
+}
+
+.barra-valor {
+  height: 100%;
+  border-radius: 999px;
+  background: #2f6f55;
+}
+
+.grafico-linea {
+  width: 100%;
+  color: #2f6f55;
+  background: #f8fafc;
+  border-radius: 18px;
+  padding: 8px;
+  margin-bottom: 12px;
+}
+
+.grafico-linea circle {
+  fill: #2f6f55;
+}
+
+.torta {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin: 0 auto 18px;
+  background: conic-gradient(#2f6f55 0 45%, #84a98c 45% 70%, #cad2c5 70% 100%);
+  display: grid;
+  place-items: center;
+}
+
+.torta-centro {
+  width: 82px;
+  height: 82px;
+  border-radius: 50%;
+  background: #fff;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  color: #2f6f55;
+}

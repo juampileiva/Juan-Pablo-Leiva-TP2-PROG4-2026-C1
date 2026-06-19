@@ -78,6 +78,49 @@ export class UsuariosService {
   }
 
 
+  async listarUsuarios() {
+    const usuarios = await this.usuarioModel
+      .find()
+      .sort({ createdAt: -1 })
+      .exec();
+
+    return {
+      usuarios: usuarios.map((usuario) => this.limpiarUsuario(usuario)),
+    };
+  }
+
+  async deshabilitarUsuario(id: string) {
+    const usuario = await this.usuarioModel.findById(id);
+
+    if (!usuario) {
+      throw new BadRequestException('No se encontró el usuario.');
+    }
+
+    usuario.activo = false;
+    await usuario.save();
+
+    return {
+      mensaje: 'Usuario deshabilitado correctamente.',
+      usuario: this.limpiarUsuario(usuario),
+    };
+  }
+
+  async habilitarUsuario(id: string) {
+    const usuario = await this.usuarioModel.findById(id);
+
+    if (!usuario) {
+      throw new BadRequestException('No se encontró el usuario.');
+    }
+
+    usuario.activo = true;
+    await usuario.save();
+
+    return {
+      mensaje: 'Usuario habilitado correctamente.',
+      usuario: this.limpiarUsuario(usuario),
+    };
+  }
+
   async buscarPorId(id: string) {
     const usuario = await this.usuarioModel.findById(id);
 

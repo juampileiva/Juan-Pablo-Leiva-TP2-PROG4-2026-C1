@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Headers,
   Delete,
   Get,
   Param,
@@ -17,10 +18,14 @@ import { CrearPublicacionDto } from './dto/crear-publicacion.dto';
 import { EliminarPublicacionDto } from './dto/eliminar-publicacion.dto';
 import { ListarPublicacionesDto } from './dto/listar-publicaciones.dto';
 import { PublicacionesService } from './publicaciones.service';
+import { TokenService } from '../auth/token.service';
 
 @Controller('publicaciones')
 export class PublicacionesController {
-  constructor(private readonly publicacionesService: PublicacionesService) {}
+  constructor(
+    private readonly publicacionesService: PublicacionesService,
+    private readonly tokenService: TokenService,
+  ) {}
 
   @Post()
   @UseInterceptors(
@@ -76,7 +81,15 @@ export class PublicacionesController {
   eliminarPublicacion(
     @Param('id') id: string,
     @Body() eliminarPublicacionDto: EliminarPublicacionDto,
+    @Headers('authorization') authorization?: string,
   ) {
+    const token = this.tokenService.obtenerTokenDesdeHeader(authorization || '');
+
+    if (token) {
+      const payload = this.tokenService.validarToken(token);
+      return this.publicacionesService.eliminarPublicacion(id, payload.sub, payload.perfil);
+    }
+
     return this.publicacionesService.eliminarPublicacion(
       id,
       eliminarPublicacionDto.usuarioId,

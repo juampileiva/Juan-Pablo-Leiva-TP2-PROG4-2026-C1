@@ -13,6 +13,7 @@ import { Publicacion } from '../../services/publicaciones.service';
 export class PublicacionCardComponent {
   @Input({ required: true }) publicacion!: Publicacion;
   @Input() mostrandoPerfil = false;
+  @Input() puedeEliminar = false;
   @Output() cambiarLike = new EventEmitter<Publicacion>();
   @Output() eliminar = new EventEmitter<Publicacion>();
 }

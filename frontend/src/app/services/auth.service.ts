@@ -13,6 +13,8 @@ export interface Usuario {
   fotoPerfilUrl: string;
   perfil: 'usuario' | 'administrador';
   activo: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 @Injectable({

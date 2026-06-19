@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService, Usuario } from '../../services/auth.service';
+import { ResaltarPropioDirective } from '../../directives/resaltar-propio.directive';
 import {
   ComentarioPublicacion,
   Publicacion,
@@ -12,7 +13,7 @@ import {
 @Component({
   selector: 'app-publicacion-detalle',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, ResaltarPropioDirective],
   templateUrl: './publicacion-detalle.component.html',
   styleUrl: './publicacion-detalle.component.css',
 })
@@ -20,6 +21,7 @@ export class PublicacionDetalleComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private router = inject(Router);
   private publicacionesService = inject(PublicacionesService);
 
   usuario: Usuario | null = null;
@@ -175,6 +177,26 @@ export class PublicacionDetalleComponent implements OnInit {
         this.mensajeError = err.error?.message || 'No se pudo actualizar el me gusta.';
       },
     });
+  }
+
+  eliminarPublicacion(): void {
+    if (!this.usuario || !this.publicacion) return;
+
+    this.publicacionesService
+      .eliminar(this.publicacion.id, this.usuario.id, this.usuario.perfil)
+      .subscribe({
+        next: () => {
+          this.router.navigateByUrl('/publicaciones');
+        },
+        error: (err) => {
+          this.mensajeError = err.error?.message || 'No se pudo eliminar la publicación.';
+        },
+      });
+  }
+
+  get puedeEliminarPublicacion(): boolean {
+    if (!this.usuario || !this.publicacion) return false;
+    return this.publicacion.esMia || this.usuario.perfil === 'administrador';
   }
 
   get puedeCargarMas(): boolean {

@@ -1,0 +1,21 @@
+{
+  "name": "Red Social TP2",
+  "short_name": "Red Social",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f6f4ef",
+  "theme_color": "#2f6f55",
+  "description": "Aplicación de red social del TP2 de Programación IV",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

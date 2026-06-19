@@ -240,6 +240,85 @@ export class PublicacionesService {
     };
   }
 
+  async publicacionesPorUsuario(desde?: string, hasta?: string) {
+    const filtro: any = { activa: true };
+    this.agregarFiltroFechas(filtro, desde, hasta);
+
+    const datos = await this.publicacionModel.aggregate([
+      { $match: filtro },
+      {
+        $group: {
+          _id: '$autorUsuario',
+          nombre: { $first: '$autorNombre' },
+          cantidad: { $sum: 1 },
+        },
+      },
+      { $sort: { cantidad: -1 } },
+    ]);
+
+    return { datos };
+  }
+
+  async comentariosPorLapso(desde?: string, hasta?: string) {
+    const desdeDate = desde ? new Date(desde) : null;
+    const hastaDate = hasta ? new Date(hasta) : null;
+
+    const publicaciones = await this.publicacionModel.find({ activa: true }).exec();
+    const acumulado = new Map<string, number>();
+
+    publicaciones.forEach((publicacion) => {
+      (publicacion.comentarios as any[]).forEach((comentario) => {
+        const fecha = new Date(comentario.fecha);
+        if (desdeDate && fecha < desdeDate) return;
+        if (hastaDate && fecha > hastaDate) return;
+
+        const clave = fecha.toISOString().slice(0, 10);
+        acumulado.set(clave, (acumulado.get(clave) || 0) + 1);
+      });
+    });
+
+    const datos = Array.from(acumulado.entries())
+      .map(([fecha, cantidad]) => ({ fecha, cantidad }))
+      .sort((a, b) => a.fecha.localeCompare(b.fecha));
+
+    return { datos };
+  }
+
+  async comentariosPorPublicacion(desde?: string, hasta?: string) {
+    const desdeDate = desde ? new Date(desde) : null;
+    const hastaDate = hasta ? new Date(hasta) : null;
+
+    const publicaciones = await this.publicacionModel.find({ activa: true }).exec();
+
+    const datos = publicaciones
+      .map((publicacion) => {
+        const cantidad = (publicacion.comentarios as any[]).filter((comentario) => {
+          const fecha = new Date(comentario.fecha);
+          if (desdeDate && fecha < desdeDate) return false;
+          if (hastaDate && fecha > hastaDate) return false;
+          return true;
+        }).length;
+
+        return {
+          publicacionId: publicacion._id.toString(),
+          titulo: publicacion.titulo,
+          cantidad,
+        };
+      })
+      .filter((item) => item.cantidad > 0)
+      .sort((a, b) => b.cantidad - a.cantidad);
+
+    return { datos };
+  }
+
+  private agregarFiltroFechas(filtro: any, desde?: string, hasta?: string) {
+    if (!desde && !hasta) return;
+
+    filtro.createdAt = {};
+    if (desde) filtro.createdAt.$gte = new Date(desde);
+    if (hasta) filtro.createdAt.$lte = new Date(hasta);
+  }
+
   private async buscarPublicacionActiva(id: string) {
     if (!Types.ObjectId.isValid(id)) {
       throw new BadRequestException('La publicación no es válida.');
