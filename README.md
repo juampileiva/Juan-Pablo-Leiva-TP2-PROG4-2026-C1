@@ -122,3 +122,29 @@ Los mensajes se muestran dentro de la interfaz con estilos propios.
 La contraseña queda encriptada en la base de datos.
 
 La imagen de perfil se guarda y su URL queda asociada al usuario registrado.
+
+## Sprint #2
+
+Se agregó el manejo real de publicaciones y las acciones principales de la red social.
+
+### Frontend
+
+- Listado de publicaciones reales desde el backend.
+- Ordenamiento por fecha o por cantidad de me gusta.
+- Paginación con límite de publicaciones por carga.
+- Componente reutilizable para mostrar cada publicación.
+- Alta de publicaciones con título, descripción e imagen opcional.
+- Acción para dar y quitar me gusta.
+- Baja lógica de publicaciones propias.
+- Mi Perfil muestra los datos del usuario, foto de perfil y las últimas 3 publicaciones.
+
+### Backend
+
+- Schema de publicaciones en MongoDB.
+- Alta de publicaciones asociadas a un usuario.
+- Guardado de imagen opcional y URL en base de datos.
+- Listado con filtros por usuario, ordenamiento y paginación.
+- Baja lógica de publicaciones.
+- Validación para que solo el autor pueda eliminar su publicación.
+- Me gusta único por usuario y publicación.
+- Eliminación de me gusta si el usuario ya lo había realizado.
