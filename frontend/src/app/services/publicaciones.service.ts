@@ -42,7 +42,7 @@ export class PublicacionesService {
   private apiUrl =
     window.location.hostname === 'localhost'
       ? 'http://localhost:3000'
-      : 'https://juan-pablo-leiva-tp2-prog4-2026-c1.onrender.com';
+      : 'https://juan-pablo-leiva-tp2-prog4-2026-c1-1.onrender.com';
 
   constructor(private http: HttpClient) {}
 
