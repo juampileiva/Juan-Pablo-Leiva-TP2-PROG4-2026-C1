@@ -1,4 +1,5 @@
-import {
+﻿import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -10,8 +11,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { AccionLikeDto } from './dto/accion-like.dto';
 import { CrearPublicacionDto } from './dto/crear-publicacion.dto';
 import { EliminarPublicacionDto } from './dto/eliminar-publicacion.dto';
@@ -20,38 +20,29 @@ import { PublicacionesService } from './publicaciones.service';
 
 @Controller('publicaciones')
 export class PublicacionesController {
-  constructor(private readonly publicacionesService: PublicacionesService) {}
+  constructor(
+    private readonly publicacionesService: PublicacionesService,
+    private readonly cloudinaryService: CloudinaryService,
+  ) {}
 
   @Post()
-  @UseInterceptors(
-    FileInterceptor('imagen', {
-      storage: diskStorage({
-        destination: './uploads/publicaciones',
-        filename: (req, file, callback) => {
-          const nombreUnico =
-            Date.now() + '-' + Math.round(Math.random() * 1e9);
-          const extension = extname(file.originalname);
-          callback(null, `publicacion-${nombreUnico}${extension}`);
-        },
-      }),
-      fileFilter: (req, file, callback) => {
-        if (!file.mimetype.match(/\/(jpg|jpeg|png|webp)$/)) {
-          return callback(
-            new Error('Solo se permiten imágenes JPG, JPEG, PNG o WEBP.'),
-            false,
-          );
-        }
-
-        callback(null, true);
-      },
-    }),
-  )
-  crearPublicacion(
+  @UseInterceptors(FileInterceptor('imagen'))
+  async crearPublicacion(
     @Body() crearPublicacionDto: CrearPublicacionDto,
     @UploadedFile() imagen?: Express.Multer.File,
   ) {
-    const baseUrl = process.env.UPLOADS_URL || 'http://localhost:3000/uploads';
-    const imagenUrl = imagen ? `${baseUrl}/publicaciones/${imagen.filename}` : '';
+    if (imagen && !imagen.mimetype.match(/\/(jpg|jpeg|png|webp)$/)) {
+      throw new BadRequestException(
+        'Solo se permiten imagenes JPG, JPEG, PNG o WEBP.',
+      );
+    }
+
+    const imagenUrl = imagen
+      ? await this.cloudinaryService.subirImagen(
+          imagen,
+          'red-social/publicaciones',
+        )
+      : '';
 
     return this.publicacionesService.crearPublicacion(
       crearPublicacionDto,
