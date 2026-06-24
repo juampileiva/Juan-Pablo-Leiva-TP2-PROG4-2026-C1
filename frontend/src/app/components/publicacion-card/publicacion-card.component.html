@@ -13,7 +13,7 @@
         *ngIf="!publicacion.autorFotoUrl"
         class="autor-placeholder rounded-circle"
       >
-        {{ publicacion.autorNombre?.charAt(0) || publicacion.autorUsuario?.charAt(0) || 'U' }}
+        {{ publicacion.autorNombre.charAt(0) || publicacion.autorUsuario.charAt(0) || 'U' }}
       </div>
 
       <div>
@@ -42,6 +42,14 @@
     </div>
 
     <div class="d-flex gap-2 mt-3 flex-wrap">
+      <button
+        type="button"
+        class="btn btn-sm btn-outline-primary"
+        (click)="verDetalle()"
+      >
+        Ver publicación / Comentar
+      </button>
+
       <button
         type="button"
         class="btn btn-sm"
