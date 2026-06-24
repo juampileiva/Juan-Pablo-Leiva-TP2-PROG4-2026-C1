@@ -52,17 +52,39 @@
   padding: 11px 18px;
   font-weight: 800;
   background: linear-gradient(135deg, #2563eb, #14b8a6);
+  color: #ffffff;
   box-shadow: 0 14px 28px rgba(37, 99, 235, 0.24);
 }
 
 .btn-outline-primary,
 .btn-outline-secondary {
   border-radius: 14px;
-  font-weight: 800;
+  font-weight: 900;
+  background: #ffffff;
+  color: #1e293b;
+  border: 2px solid #2563eb;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-secondary:hover {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+.btn-group .btn {
+  border-radius: 12px;
+}
+
+.btn-group .btn.active,
+.btn-group .btn.btn-primary {
+  background: linear-gradient(135deg, #2563eb, #14b8a6);
+  color: #ffffff;
+  border: 2px solid transparent;
 }
 
 .feed-publicaciones {
-  min-height: 420px;
+  min-height: auto;
 }
 
 .preview-publicacion {
@@ -71,10 +93,6 @@
   object-fit: cover;
   border-radius: 18px;
   border: 1px solid #e2e8f0;
-}
-
-.btn-group .btn {
-  border-radius: 12px;
 }
 
 .modal-publicacion-backdrop {

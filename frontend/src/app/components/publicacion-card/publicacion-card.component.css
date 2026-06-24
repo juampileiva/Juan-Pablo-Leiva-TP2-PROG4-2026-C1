@@ -6,6 +6,8 @@
   box-shadow: 0 18px 45px rgba(15, 23, 42, 0.09);
   border: 1px solid rgba(148, 163, 184, 0.22);
   transition: transform 0.18s ease, box-shadow 0.18s ease;
+  height: auto;
+  min-height: auto;
 }
 
 .publicacion-card:hover {
@@ -29,6 +31,8 @@
 .autor-placeholder {
   width: 52px;
   height: 52px;
+  min-width: 52px;
+  min-height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -46,12 +50,14 @@
 }
 
 .imagen-publicacion {
+  display: block;
   width: 100%;
   max-height: 360px;
   object-fit: cover;
   border-radius: 20px;
   border: 1px solid #e2e8f0;
   margin-top: 8px;
+  margin-bottom: 0;
   box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
 }
 
@@ -75,8 +81,9 @@
 }
 
 .btn-outline-primary {
-  border-color: #bfdbfe;
-  color: #2563eb;
+  background: #ffffff;
+  border-color: #2563eb;
+  color: #1d4ed8;
 }
 
 .btn-outline-primary:hover {
@@ -84,8 +91,15 @@
   color: #ffffff;
 }
 
+.btn-primary {
+  background: linear-gradient(135deg, #2563eb, #14b8a6);
+  border: 0;
+  color: #ffffff;
+}
+
 .btn-outline-danger {
-  border-color: #fecdd3;
+  background: #ffffff;
+  border-color: #e11d48;
   color: #e11d48;
 }
 
