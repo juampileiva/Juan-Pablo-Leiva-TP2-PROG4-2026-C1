@@ -181,3 +181,8 @@
     width: 100%;
   }
 }
+
+/* Fondo oscuro en publicaciones sin tocar las cards */
+.publicaciones-page::before {
+  background: linear-gradient(135deg, #0f172a 0%, #111827 45%, #1e293b 100%) !important;
+}
