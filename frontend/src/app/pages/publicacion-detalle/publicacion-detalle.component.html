@@ -1,0 +1,131 @@
+<div class="page-container detalle-page">
+  <a routerLink="/publicaciones" class="btn btn-link px-0 mb-3">← Volver a publicaciones</a>
+
+  <div class="alert alert-danger" *ngIf="mensajeError">{{ mensajeError }}</div>
+  <div class="alert alert-success" *ngIf="mensajeOk">{{ mensajeOk }}</div>
+
+  <div class="text-center py-5" *ngIf="cargando">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="text-muted mt-2 mb-0">Cargando publicación...</p>
+  </div>
+
+  <article class="card card-custom publicacion-grande" *ngIf="!cargando && publicacion">
+    <div class="card-body p-4 p-lg-5">
+      <div class="d-flex gap-3 align-items-center mb-4">
+        <img
+          *ngIf="publicacion.autorFotoUrl"
+          [src]="publicacion.autorFotoUrl"
+          class="autor-foto"
+          alt="Foto de perfil"
+        />
+
+        <div class="autor-foto autor-placeholder" *ngIf="!publicacion.autorFotoUrl">
+          {{ publicacion.autorNombre.charAt(0) }}
+        </div>
+
+        <div>
+          <h1 class="h3 fw-bold mb-1">{{ publicacion.titulo }}</h1>
+          <div class="text-muted">
+            {{ publicacion.autorNombre }} · @{{ publicacion.autorUsuario }} ·
+            {{ publicacion.createdAt | date: 'dd/MM/yyyy HH:mm' }}
+          </div>
+        </div>
+      </div>
+
+      <p class="texto-publicacion mb-4">{{ publicacion.descripcion }}</p>
+
+      <img
+        *ngIf="publicacion.imagenUrl"
+        [src]="publicacion.imagenUrl"
+        class="imagen-detalle mb-4"
+        alt="Imagen de publicación"
+      />
+
+      <div class="d-flex flex-wrap gap-2 align-items-center">
+        <button
+          type="button"
+          class="btn"
+          [ngClass]="publicacion.meGusta ? 'btn-primary' : 'btn-outline-primary'"
+          (click)="cambiarLike()"
+        >
+          {{ publicacion.meGusta ? 'Quitar me gusta' : 'Me gusta' }}
+          <span class="ms-1">{{ publicacion.cantidadLikes }}</span>
+        </button>
+
+        <span class="text-muted">{{ publicacion.cantidadComentarios }} comentarios</span>
+      </div>
+    </div>
+  </article>
+
+  <section class="card card-custom mt-4" *ngIf="publicacion">
+    <div class="card-body p-4">
+      <h2 class="h5 fw-bold mb-3">Comentarios</h2>
+
+      <form [formGroup]="formComentario" (ngSubmit)="agregarComentario()" class="mb-4">
+        <label class="form-label">Escribir comentario</label>
+        <textarea
+          class="form-control"
+          rows="3"
+          formControlName="mensaje"
+          placeholder="Dejá tu comentario"
+        ></textarea>
+        <div class="text-error" *ngIf="formComentario.controls.mensaje.touched && formComentario.controls.mensaje.invalid">
+          El comentario debe tener entre 2 y 500 caracteres.
+        </div>
+        <div class="mt-3 text-end">
+          <button class="btn btn-primary" type="submit" [disabled]="guardandoComentario">
+            {{ guardandoComentario ? 'Publicando...' : 'Comentar' }}
+          </button>
+        </div>
+      </form>
+
+      <div class="text-center py-3" *ngIf="cargandoComentarios && comentarios.length === 0">
+        <div class="spinner-border text-primary" role="status"></div>
+      </div>
+
+      <div class="comentario-detalle" *ngFor="let comentario of comentarios">
+        <div class="d-flex justify-content-between gap-3">
+          <div>
+            <strong>@{{ comentario.nombreUsuario }}</strong>
+            <span class="text-muted small ms-2">{{ comentario.fecha | date: 'dd/MM/yyyy HH:mm' }}</span>
+            <span class="badge text-bg-light ms-2" *ngIf="comentario.modificado">editado</span>
+          </div>
+
+          <button
+            class="btn btn-sm btn-outline-secondary"
+            type="button"
+            *ngIf="comentario.esMio && comentarioEditandoId !== comentario.id"
+            (click)="iniciarEdicion(comentario)"
+          >
+            Editar
+          </button>
+        </div>
+
+        <p class="mb-0 mt-2" *ngIf="comentarioEditandoId !== comentario.id">
+          {{ comentario.mensaje }}
+        </p>
+
+        <form [formGroup]="formEdicion" (ngSubmit)="guardarEdicion(comentario)" *ngIf="comentarioEditandoId === comentario.id" class="mt-2">
+          <textarea class="form-control" rows="3" formControlName="mensaje"></textarea>
+          <div class="text-error" *ngIf="formEdicion.controls.mensaje.touched && formEdicion.controls.mensaje.invalid">
+            El comentario debe tener entre 2 y 500 caracteres.
+          </div>
+          <div class="d-flex justify-content-end gap-2 mt-2">
+            <button class="btn btn-sm btn-outline-secondary" type="button" (click)="cancelarEdicion()">Cancelar</button>
+            <button class="btn btn-sm btn-primary" type="submit">Guardar</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="text-center mt-4" *ngIf="puedeCargarMas">
+        <button class="btn btn-outline-primary" type="button" (click)="cargarComentarios(false)" [disabled]="cargandoComentarios">
+          {{ cargandoComentarios ? 'Cargando...' : 'Cargar más' }}
+        </button>
+      </div>
+
+      <p class="text-muted text-center mb-0" *ngIf="!cargandoComentarios && comentarios.length === 0">
+        Todavía no hay comentarios.
+      </p>
+    </div>
+  </section>
+</div>

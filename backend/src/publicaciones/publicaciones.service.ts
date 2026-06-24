@@ -86,6 +86,14 @@ export class PublicacionesService {
     };
   }
 
+  async obtenerPublicacion(id: string, usuarioActualId?: string) {
+    const publicacion = await this.buscarPublicacionActiva(id);
+
+    return {
+      publicacion: this.formatearPublicacion(publicacion, usuarioActualId),
+    };
+  }
+
   async eliminarPublicacion(id: string, usuarioId: string, perfil = 'usuario') {
     if (!Types.ObjectId.isValid(id)) {
       throw new BadRequestException('La publicación no es válida.');
@@ -157,6 +165,81 @@ export class PublicacionesService {
     };
   }
 
+  async agregarComentario(publicacionId: string, usuarioId: string, mensaje: string) {
+    const publicacion = await this.buscarPublicacionActiva(publicacionId);
+    const usuario = await this.usuariosService.buscarPorId(usuarioId);
+
+    publicacion.comentarios.push({
+      usuarioId: new Types.ObjectId(usuarioId),
+      nombreUsuario: usuario.nombreUsuario,
+      mensaje,
+      fecha: new Date(),
+      modificado: false,
+    } as any);
+
+    await publicacion.save();
+
+    return {
+      mensaje: 'Comentario agregado correctamente.',
+      comentario: this.formatearComentario(
+        publicacion.comentarios[publicacion.comentarios.length - 1] as any,
+        usuarioId,
+      ),
+      publicacion: this.formatearPublicacion(publicacion, usuarioId),
+    };
+  }
+
+  async editarComentario(
+    publicacionId: string,
+    comentarioId: string,
+    usuarioId: string,
+    mensaje: string,
+  ) {
+    const publicacion = await this.buscarPublicacionActiva(publicacionId);
+    const comentario = (publicacion.comentarios as any).id(comentarioId);
+
+    if (!comentario) {
+      throw new NotFoundException('No se encontró el comentario.');
+    }
+
+    if (comentario.usuarioId.toString() !== usuarioId) {
+      throw new ForbiddenException('No podés editar este comentario.');
+    }
+
+    comentario.mensaje = mensaje;
+    comentario.modificado = true;
+    await publicacion.save();
+
+    return {
+      mensaje: 'Comentario editado correctamente.',
+      comentario: this.formatearComentario(comentario, usuarioId),
+    };
+  }
+
+  async listarComentarios(
+    publicacionId: string,
+    offset = 0,
+    limit = 5,
+    usuarioActualId?: string,
+  ) {
+    const publicacion = await this.buscarPublicacionActiva(publicacionId);
+
+    const comentariosOrdenados = [...(publicacion.comentarios as any[])].sort(
+      (a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime(),
+    );
+
+    const comentarios = comentariosOrdenados
+      .slice(offset, offset + limit)
+      .map((comentario) => this.formatearComentario(comentario, usuarioActualId));
+
+    return {
+      comentarios,
+      total: publicacion.comentarios.length,
+      offset,
+      limit,
+    };
+  }
+
   private async buscarPublicacionActiva(id: string) {
     if (!Types.ObjectId.isValid(id)) {
       throw new BadRequestException('La publicación no es válida.');
@@ -174,11 +257,28 @@ export class PublicacionesService {
     return publicacion;
   }
 
+  private formatearComentario(comentario: any, usuarioActualId?: string) {
+    const usuarioId = comentario.usuarioId?.toString?.() || comentario.usuarioId;
+
+    return {
+      id: comentario._id?.toString?.() || comentario.id,
+      usuarioId,
+      nombreUsuario: comentario.nombreUsuario,
+      mensaje: comentario.mensaje,
+      fecha: comentario.fecha,
+      modificado: !!comentario.modificado,
+      esMio: usuarioActualId ? usuarioId === usuarioActualId : false,
+    };
+  }
+
   private formatearPublicacion(publicacion: any, usuarioActualId?: string) {
     const id = publicacion._id?.toString?.() || publicacion._id;
     const usuarioId = publicacion.usuarioId?.toString?.() || publicacion.usuarioId;
     const likes = publicacion.likes || [];
     const comentarios = publicacion.comentarios || [];
+    const comentariosOrdenados = [...comentarios].sort(
+      (a: any, b: any) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime(),
+    );
 
     return {
       id,
@@ -191,11 +291,9 @@ export class PublicacionesService {
       autorFotoUrl: publicacion.autorFotoUrl || '',
       cantidadLikes: publicacion.cantidadLikes ?? likes.length,
       cantidadComentarios: publicacion.cantidadComentarios ?? comentarios.length,
-      comentarios: comentarios.slice(0, 3).map((comentario: any) => ({
-        nombreUsuario: comentario.nombreUsuario,
-        mensaje: comentario.mensaje,
-        fecha: comentario.fecha,
-      })),
+      comentarios: comentariosOrdenados.slice(0, 3).map((comentario: any) =>
+        this.formatearComentario(comentario, usuarioActualId),
+      ),
       meGusta: usuarioActualId
         ? likes.some((like: any) => like.toString() === usuarioActualId)
         : false,

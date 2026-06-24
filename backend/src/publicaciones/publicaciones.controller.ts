@@ -55,6 +55,14 @@ export class PublicacionesController {
     return this.publicacionesService.listarPublicaciones(filtros);
   }
 
+  @Get(':id')
+  obtenerPublicacion(
+    @Param('id') id: string,
+    @Query('usuarioActualId') usuarioActualId?: string,
+  ) {
+    return this.publicacionesService.obtenerPublicacion(id, usuarioActualId);
+  }
+
   @Delete(':id')
   eliminarPublicacion(
     @Param('id') id: string,

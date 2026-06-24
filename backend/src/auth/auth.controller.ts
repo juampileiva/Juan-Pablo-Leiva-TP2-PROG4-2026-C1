@@ -2,6 +2,7 @@
   BadRequestException,
   Body,
   Controller,
+  Headers,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -11,11 +12,13 @@ import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegistroDto } from './dto/registro.dto';
+import { TokenService } from './token.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
+    private readonly tokenService: TokenService,
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
@@ -44,5 +47,27 @@ export class AuthController {
   @Post('login')
   async login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
+  }
+
+  @Post('autorizar')
+  async autorizar(
+    @Headers('authorization') authorization: string,
+    @Body('token') tokenBody?: string,
+  ) {
+    const token =
+      this.tokenService.obtenerTokenDesdeHeader(authorization) || tokenBody || '';
+
+    return this.authService.autorizar(token);
+  }
+
+  @Post('refrescar')
+  async refrescar(
+    @Headers('authorization') authorization: string,
+    @Body('token') tokenBody?: string,
+  ) {
+    const token =
+      this.tokenService.obtenerTokenDesdeHeader(authorization) || tokenBody || '';
+
+    return this.authService.refrescar(token);
   }
 }

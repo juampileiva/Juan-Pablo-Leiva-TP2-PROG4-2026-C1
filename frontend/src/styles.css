@@ -139,3 +139,9 @@ body {
 .rule-bad {
   color: var(--color-suave);
 }
+
+/* Fondo oscuro general */
+body {
+  background: linear-gradient(135deg, #0f172a 0%, #111827 45%, #1e293b 100%) !important;
+  background-attachment: fixed;
+}

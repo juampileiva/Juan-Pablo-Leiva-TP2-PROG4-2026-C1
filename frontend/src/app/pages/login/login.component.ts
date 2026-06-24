@@ -1,4 +1,4 @@
-﻿import { CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -43,7 +43,7 @@ export class LoginComponent {
       })
       .subscribe({
         next: (res) => {
-          this.authService.guardarUsuario(res.usuario);
+          this.authService.guardarSesion(res.usuario, res.token);
           this.mensajeOk = 'Login correcto. Redirigiendo...';
 
           setTimeout(() => {
