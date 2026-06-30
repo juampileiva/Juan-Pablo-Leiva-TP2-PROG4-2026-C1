@@ -53,6 +53,15 @@
         </button>
 
         <span class="text-muted">{{ publicacion.cantidadComentarios }} comentarios</span>
+
+        <button
+          type="button"
+          class="btn btn-outline-danger"
+          *ngIf="puedeEliminarPublicacion"
+          (click)="eliminarPublicacion()"
+        >
+          Eliminar publicación
+        </button>
       </div>
     </div>
   </article>
@@ -83,7 +92,7 @@
         <div class="spinner-border text-primary" role="status"></div>
       </div>
 
-      <div class="comentario-detalle" *ngFor="let comentario of comentarios">
+      <div class="comentario-detalle" [appResaltarPropio]="comentario.esMio" *ngFor="let comentario of comentarios">
         <div class="d-flex justify-content-between gap-3">
           <div>
             <strong>@{{ comentario.nombreUsuario }}</strong>

@@ -63,6 +63,7 @@
       <div class="col-12 col-md-6 col-xl-4" *ngFor="let publicacion of publicaciones">
         <app-publicacion-card
           [publicacion]="publicacion"
+          [puedeEliminar]="usuario?.perfil === 'administrador'"
           (cambiarLike)="cambiarLike($event)"
           (eliminar)="eliminar($event)"
         ></app-publicacion-card>

@@ -1,0 +1,254 @@
+﻿.dashboard-usuarios-page {
+  padding: 32px 20px 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  color: #ffffff;
+}
+
+.dashboard-header h1 {
+  font-weight: 900;
+  margin: 0;
+}
+
+.dashboard-header p {
+  margin: 4px 0 0;
+  color: #cbd5e1;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(320px, 420px) 1fr;
+  gap: 22px;
+  align-items: start;
+}
+
+.panel {
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 24px;
+  padding: 22px;
+  box-shadow: 0 22px 55px rgba(2, 8, 23, 0.22);
+  border: 1px solid rgba(226, 232, 240, 0.85);
+}
+
+.panel h2 {
+  font-size: 1.25rem;
+  font-weight: 900;
+  margin-bottom: 18px;
+  color: #0f172a;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.campo {
+  margin-bottom: 14px;
+}
+
+.campo label {
+  display: block;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 6px;
+}
+
+.campo small {
+  display: block;
+  margin-top: 5px;
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.ayuda,
+.contador {
+  display: block;
+  margin-top: 5px;
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.form-control {
+  border-radius: 14px;
+  border: 1px solid #cbd5e1;
+  padding: 11px 13px;
+}
+
+.form-control:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+.perfil-options {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.perfil-options label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8fafc;
+  border: 1px solid #dbe3ef;
+  padding: 10px 14px;
+  border-radius: 14px;
+  cursor: pointer;
+}
+
+.alerta {
+  border-radius: 16px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.alerta-error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.alerta-ok {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.usuarios-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.usuarios-header p {
+  margin: -10px 0 16px;
+  color: #64748b;
+}
+
+.estado-lista {
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 16px;
+  padding: 18px;
+  color: #64748b;
+  font-weight: 700;
+  text-align: center;
+}
+
+.usuarios-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.usuario-item {
+  display: grid;
+  grid-template-columns: 52px 1fr auto;
+  gap: 14px;
+  align-items: center;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 18px;
+  padding: 14px;
+  background: #ffffff;
+}
+
+.avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar-text {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #2563eb, #14b8a6);
+  color: #ffffff;
+  font-weight: 900;
+}
+
+.usuario-info strong {
+  display: block;
+  color: #0f172a;
+}
+
+.usuario-info span {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.usuario-info p {
+  margin: 5px 0;
+  color: #475569;
+}
+
+.usuario-meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.usuario-meta span {
+  background: #f1f5f9;
+  color: #475569;
+  border-radius: 999px;
+  padding: 4px 9px;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.usuario-meta .activo {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.usuario-meta .inactivo {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.usuario-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn {
+  border-radius: 999px;
+  font-weight: 800;
+}
+
+@media (max-width: 900px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .usuario-item {
+    grid-template-columns: 52px 1fr;
+  }
+
+  .usuario-actions {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 560px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

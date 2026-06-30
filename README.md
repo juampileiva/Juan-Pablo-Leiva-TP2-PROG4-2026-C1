@@ -148,3 +148,54 @@ Se agregó el manejo real de publicaciones y las acciones principales de la red 
 - Validación para que solo el autor pueda eliminar su publicación.
 - Me gusta único por usuario y publicación.
 - Eliminación de me gusta si el usuario ya lo había realizado.
+
+## Sprint #3
+
+Se completó el detalle de publicación con comentarios y el manejo de sesión con token.
+
+### Frontend
+
+- Página de detalle para ver una publicación completa.
+- Alta de comentarios.
+- Listado de comentarios paginado con botón para cargar más.
+- Edición de comentarios propios.
+- Indicación visual cuando un comentario fue editado.
+- Guardado del token en el navegador al iniciar sesión o registrarse.
+- Pantalla de cargando con spinner y validación de sesión.
+- Aviso de sesión próxima a vencer y opción para extenderla.
+- Redirección al login ante respuestas 401.
+
+### Backend
+
+- Token de sesión con vencimiento de 15 minutos.
+- Ruta para autorizar token.
+- Ruta para refrescar token.
+- Alta, listado y modificación de comentarios.
+- Comentarios ordenados por fecha y paginados.
+
+## Sprint #4
+
+Se agregó la administración de usuarios, estadísticas, PWA, pipes y directivas propias.
+
+### Frontend
+
+- Baja lógica de publicaciones habilitada para administradores.
+- Dashboard de usuarios solo para administradores.
+- Listado de usuarios.
+- Alta de usuarios desde dashboard con perfil usuario o administrador.
+- Habilitación y deshabilitación de usuarios.
+- Dashboard de estadísticas con filtros por fecha.
+- Gráficos de barras, línea y torta.
+- Configuración PWA.
+- Pipes propias: fecha corta, iniciales y resumen.
+- Directivas propias: auto focus, imagen fallback y resaltado de elemento propio.
+
+### Backend
+
+- Controller de usuarios para administrador.
+- Listado de usuarios.
+- Alta de usuarios desde dashboard.
+- Baja y alta lógica de usuarios.
+- Controller de estadísticas dentro del módulo publicaciones.
+- Rutas GET para las estadísticas del dashboard.
+- Validación de token de administrador en rutas privadas de dashboard.

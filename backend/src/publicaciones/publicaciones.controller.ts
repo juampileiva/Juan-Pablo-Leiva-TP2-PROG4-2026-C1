@@ -4,6 +4,7 @@
   Controller,
   Delete,
   Get,
+  Headers,
   Param,
   Post,
   Query,
@@ -11,6 +12,7 @@
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { TokenService } from '../auth/token.service';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { AccionLikeDto } from './dto/accion-like.dto';
 import { CrearPublicacionDto } from './dto/crear-publicacion.dto';
@@ -22,6 +24,7 @@ import { PublicacionesService } from './publicaciones.service';
 export class PublicacionesController {
   constructor(
     private readonly publicacionesService: PublicacionesService,
+    private readonly tokenService: TokenService,
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
@@ -67,7 +70,21 @@ export class PublicacionesController {
   eliminarPublicacion(
     @Param('id') id: string,
     @Body() eliminarPublicacionDto: EliminarPublicacionDto,
+    @Headers('authorization') authorization?: string,
   ) {
+    const token = this.tokenService.obtenerTokenDesdeHeader(
+      authorization || '',
+    );
+
+    if (token) {
+      const payload = this.tokenService.validarToken(token);
+      return this.publicacionesService.eliminarPublicacion(
+        id,
+        payload.sub,
+        payload.perfil,
+      );
+    }
+
     return this.publicacionesService.eliminarPublicacion(
       id,
       eliminarPublicacionDto.usuarioId,
@@ -82,6 +99,9 @@ export class PublicacionesController {
 
   @Delete(':id/me-gusta')
   quitarMeGusta(@Param('id') id: string, @Body() accionLikeDto: AccionLikeDto) {
-    return this.publicacionesService.quitarMeGusta(id, accionLikeDto.usuarioId);
+    return this.publicacionesService.quitarMeGusta(
+      id,
+      accionLikeDto.usuarioId,
+    );
   }
 }

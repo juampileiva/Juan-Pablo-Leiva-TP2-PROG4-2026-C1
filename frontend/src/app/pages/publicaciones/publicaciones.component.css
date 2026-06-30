@@ -186,3 +186,50 @@
 .publicaciones-page::before {
   background: linear-gradient(135deg, #0f172a 0%, #111827 45%, #1e293b 100%) !important;
 }
+
+/* Feed en una sola columna, sin huecos entre publicaciones */
+.feed-publicaciones {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 18px !important;
+  width: 100% !important;
+}
+
+.feed-publicaciones app-publicacion-card {
+  display: block !important;
+  width: 100% !important;
+  max-width: 680px !important;
+}
+
+.publicaciones-page .row,
+.publicaciones-page .row > * {
+  width: 100% !important;
+}
+
+.publicaciones-page .col,
+.publicaciones-page [class*="col-"] {
+  width: 100% !important;
+  max-width: 680px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Separacion de botones de orden */
+.acciones-publicaciones,
+.btn-group {
+  gap: 10px !important;
+}
+
+.btn-group {
+  display: flex !important;
+  flex-wrap: wrap !important;
+}
+
+.btn-group .btn {
+  margin-right: 8px !important;
+}
+
+.btn-group .btn:last-child {
+  margin-right: 0 !important;
+}

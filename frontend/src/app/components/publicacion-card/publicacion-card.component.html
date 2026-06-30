@@ -47,7 +47,7 @@
         class="btn btn-sm btn-outline-primary"
         (click)="verDetalle()"
       >
-        Ver publicación / Comentar
+        Ver publicacion / Comentar
       </button>
 
       <button
@@ -63,10 +63,10 @@
       <button
         type="button"
         class="btn btn-sm btn-outline-danger"
-        *ngIf="publicacion.esMia"
+        *ngIf="publicacion.esMia || puedeEliminar"
         (click)="eliminar.emit(publicacion)"
       >
-        Eliminar
+        Dar de baja
       </button>
     </div>
 

@@ -146,3 +146,23 @@ button[type='submit']:disabled {
 .link-registro a:hover {
   text-decoration: underline;
 }
+
+/* Mensaje de bienvenida en login */
+.login-card::before {
+  content: 'Bienvenido a la red social';
+  display: block;
+  font-size: 1.7rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin-bottom: 6px;
+  letter-spacing: -0.4px;
+}
+
+.login-card::after {
+  content: 'Iniciá sesión para ver publicaciones, comentar y participar.';
+  display: block;
+  color: #64748b;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 18px;
+}

@@ -1,0 +1,88 @@
+<div class="page-container">
+  <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+    <div>
+      <h1 class="page-title h2 mb-2">Estadísticas</h1>
+      <p class="page-subtitle mb-0">Indicadores principales de publicaciones y comentarios.</p>
+    </div>
+
+    <div class="filtros-fecha">
+      <label>
+        Desde
+        <input type="date" class="form-control" [(ngModel)]="desde" />
+      </label>
+      <label>
+        Hasta
+        <input type="date" class="form-control" [(ngModel)]="hasta" />
+      </label>
+      <button class="btn btn-primary" type="button" (click)="cargarEstadisticas()">Aplicar</button>
+    </div>
+  </div>
+
+  <div class="alert alert-danger" *ngIf="mensajeError">{{ mensajeError }}</div>
+
+  <div class="text-center py-5" *ngIf="cargando">
+    <div class="spinner-border text-primary"></div>
+  </div>
+
+  <div class="row g-4" *ngIf="!cargando">
+    <div class="col-12 col-xl-4">
+      <div class="card card-custom h-100">
+        <div class="card-body p-4">
+          <h2 class="h5 fw-bold mb-1">Publicaciones por usuario</h2>
+          <p class="text-muted small">Gráfico de barras</p>
+
+          <div *ngFor="let item of publicacionesUsuario" class="barra-item">
+            <div class="d-flex justify-content-between small mb-1">
+              <span>{{ item.nombre || 'Usuario' }}</span>
+              <strong>{{ item.cantidad }}</strong>
+            </div>
+            <div class="barra-base">
+              <div class="barra-valor" [style.width.%]="anchoBarra(item.cantidad, publicacionesUsuario)"></div>
+            </div>
+          </div>
+
+          <p class="text-muted mb-0" *ngIf="publicacionesUsuario.length === 0">Sin datos en este lapso.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-xl-4">
+      <div class="card card-custom h-100">
+        <div class="card-body p-4">
+          <h2 class="h5 fw-bold mb-1">Comentarios por fecha</h2>
+          <p class="text-muted small">Gráfico de líneas</p>
+
+          <svg viewBox="0 0 310 140" class="grafico-linea" *ngIf="comentariosLapso.length > 0">
+            <polyline [attr.points]="puntosLinea()" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></polyline>
+            <circle *ngFor="let item of comentariosLapso; let i = index" r="4" [attr.cx]="10 + i * (comentariosLapso.length === 1 ? 280 : 280 / (comentariosLapso.length - 1))" [attr.cy]="120 - (item.cantidad / maximo(comentariosLapso)) * 90"></circle>
+          </svg>
+
+          <div class="small text-muted" *ngFor="let item of comentariosLapso">
+            {{ item.fecha | fechaCorta }}: {{ item.cantidad }} comentarios
+          </div>
+
+          <p class="text-muted mb-0" *ngIf="comentariosLapso.length === 0">Sin datos en este lapso.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-xl-4">
+      <div class="card card-custom h-100">
+        <div class="card-body p-4">
+          <h2 class="h5 fw-bold mb-1">Comentarios por publicación</h2>
+          <p class="text-muted small">Distribución tipo torta</p>
+
+          <div class="torta" *ngIf="comentariosPublicacion.length > 0">
+            <div class="torta-centro">{{ comentariosPublicacion.length }}</div>
+          </div>
+
+          <div class="small mb-2" *ngFor="let item of comentariosPublicacion">
+            <strong>{{ porcentajeTorta(item) }}%</strong> · {{ item.titulo }} · {{ item.cantidad }} comentarios
+          </div>
+
+          <p class="text-muted mb-0" *ngIf="comentariosPublicacion.length === 0">Sin datos en este lapso.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

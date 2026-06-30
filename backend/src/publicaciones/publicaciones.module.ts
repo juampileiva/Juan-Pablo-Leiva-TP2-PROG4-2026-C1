@@ -4,6 +4,7 @@ import { AuthModule } from '../auth/auth.module';
 import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 import { UsuariosModule } from '../usuarios/usuarios.module';
 import { ComentariosController } from './comentarios/comentarios.controller';
+import { EstadisticasController } from './estadisticas.controller';
 import { Publicacion, PublicacionSchema } from './publicacion.schema';
 import { PublicacionesController } from './publicaciones.controller';
 import { PublicacionesService } from './publicaciones.service';
@@ -20,7 +21,11 @@ import { PublicacionesService } from './publicaciones.service';
     AuthModule,
     CloudinaryModule,
   ],
-  controllers: [PublicacionesController, ComentariosController],
+  controllers: [
+    PublicacionesController,
+    ComentariosController,
+    EstadisticasController,
+  ],
   providers: [PublicacionesService],
 })
 export class PublicacionesModule {}

@@ -1,0 +1,233 @@
+﻿<section class="dashboard-usuarios-page">
+  <div class="dashboard-header">
+    <div>
+      <h1>Dashboard de usuarios</h1>
+      <p>Alta de usuarios y baja lógica.</p>
+    </div>
+
+    <button type="button" class="btn btn-outline-primary" (click)="cargarUsuarios()">
+      Actualizar
+    </button>
+  </div>
+
+  <div class="alerta alerta-error" *ngIf="mensajeError">
+    {{ mensajeError }}
+  </div>
+
+  <div class="alerta alerta-ok" *ngIf="mensajeOk">
+    {{ mensajeOk }}
+  </div>
+
+  <div class="dashboard-grid">
+    <form class="panel formulario-panel" [formGroup]="form" (ngSubmit)="crearUsuario()">
+      <h2>Crear usuario</h2>
+
+      <div class="form-row">
+        <div class="campo">
+          <label>Nombre</label>
+          <input class="form-control" type="text" formControlName="nombre" appAutoFocus />
+          <small *ngIf="form.controls.nombre.touched && form.controls.nombre.hasError('required')">
+            El nombre es obligatorio.
+          </small>
+          <small *ngIf="form.controls.nombre.touched && form.controls.nombre.hasError('minlength')">
+            Debe tener al menos 2 caracteres.
+          </small>
+        </div>
+
+        <div class="campo">
+          <label>Apellido</label>
+          <input class="form-control" type="text" formControlName="apellido" />
+          <small *ngIf="form.controls.apellido.touched && form.controls.apellido.hasError('required')">
+            El apellido es obligatorio.
+          </small>
+          <small *ngIf="form.controls.apellido.touched && form.controls.apellido.hasError('minlength')">
+            Debe tener al menos 2 caracteres.
+          </small>
+        </div>
+      </div>
+
+      <div class="campo">
+        <label>Correo</label>
+        <input class="form-control" type="email" formControlName="correo" />
+        <small *ngIf="form.controls.correo.touched && form.controls.correo.hasError('required')">
+          El correo es obligatorio.
+        </small>
+        <small *ngIf="form.controls.correo.touched && form.controls.correo.hasError('email')">
+          Ingresá un correo válido.
+        </small>
+      </div>
+
+      <div class="campo">
+        <label>Nombre de usuario</label>
+        <input class="form-control" type="text" formControlName="nombreUsuario" />
+        <small *ngIf="form.controls.nombreUsuario.touched && form.controls.nombreUsuario.hasError('required')">
+          El nombre de usuario es obligatorio.
+        </small>
+        <small *ngIf="form.controls.nombreUsuario.touched && form.controls.nombreUsuario.hasError('minlength')">
+          Debe tener al menos 3 caracteres.
+        </small>
+      </div>
+
+      <div class="form-row">
+        <div class="campo">
+          <label>Contraseña</label>
+          <input class="form-control" type="password" formControlName="password" />
+          <small *ngIf="form.controls.password.touched && form.controls.password.hasError('required')">
+            La contraseña es obligatoria.
+          </small>
+          <small *ngIf="form.controls.password.touched && form.controls.password.hasError('pattern')">
+            Debe tener 8 caracteres, una mayúscula y un número.
+          </small>
+        </div>
+
+        <div class="campo">
+          <label>Repetir contraseña</label>
+          <input class="form-control" type="password" formControlName="repetirPassword" />
+          <small *ngIf="form.controls.repetirPassword.touched && form.controls.repetirPassword.hasError('required')">
+            Repetí la contraseña.
+          </small>
+          <small *ngIf="form.controls.repetirPassword.touched && form.hasError('passwordsDistintas')">
+            Las contraseñas no coinciden.
+          </small>
+        </div>
+      </div>
+
+      <div class="campo">
+        <label>Fecha de nacimiento</label>
+        <input class="form-control" type="date" formControlName="fechaNacimiento" />
+        <small *ngIf="form.controls.fechaNacimiento.touched && form.controls.fechaNacimiento.hasError('required')">
+          La fecha de nacimiento es obligatoria.
+        </small>
+      </div>
+
+      <div class="campo">
+        <label>Descripción breve</label>
+        <textarea
+          class="form-control"
+          rows="3"
+          formControlName="descripcionBreve"
+        ></textarea>
+        <div class="contador">
+          {{ form.value.descripcionBreve?.length || 0 }}/250
+        </div>
+        <small *ngIf="form.controls.descripcionBreve.touched && form.controls.descripcionBreve.hasError('required')">
+          La descripción es obligatoria.
+        </small>
+        <small *ngIf="form.controls.descripcionBreve.touched && form.controls.descripcionBreve.hasError('maxlength')">
+          Máximo 250 caracteres.
+        </small>
+      </div>
+
+      <div class="campo">
+        <label>Foto de perfil</label>
+        <input
+          class="form-control"
+          type="file"
+          accept="image/png, image/jpeg, image/jpg, image/webp"
+          (change)="seleccionarFoto($event)"
+        />
+        <span class="ayuda">Formatos permitidos: JPG, PNG o WEBP.</span>
+      </div>
+
+      <div class="campo">
+        <label>Perfil</label>
+
+        <div class="perfil-options">
+          <label>
+            <input type="radio" formControlName="perfil" value="usuario" />
+            Usuario
+          </label>
+
+          <label>
+            <input type="radio" formControlName="perfil" value="administrador" />
+            Administrador
+          </label>
+        </div>
+
+        <small *ngIf="form.controls.perfil.touched && form.controls.perfil.hasError('required')">
+          Seleccioná el perfil del usuario.
+        </small>
+      </div>
+
+      <button class="btn btn-primary w-100" type="submit" [disabled]="guardando">
+        {{ guardando ? 'Guardando...' : 'Crear usuario' }}
+      </button>
+    </form>
+
+    <div class="panel usuarios-panel">
+      <div class="usuarios-header">
+        <div>
+          <h2>Usuarios registrados</h2>
+          <p>{{ usuarios.length }} usuarios cargados</p>
+        </div>
+      </div>
+
+      <div *ngIf="cargando" class="estado-lista">
+        Cargando usuarios...
+      </div>
+
+      <div *ngIf="!cargando && usuarios.length === 0" class="estado-lista">
+        No hay usuarios para mostrar.
+      </div>
+
+      <div class="usuarios-lista" *ngIf="!cargando && usuarios.length > 0">
+        <div class="usuario-item" *ngFor="let usuario of usuariosMostrados">
+          <img
+            *ngIf="usuario.fotoPerfilUrl"
+            class="avatar"
+            [src]="usuario.fotoPerfilUrl"
+            alt="Foto de perfil"
+            appImagenFallback
+          />
+
+          <div *ngIf="!usuario.fotoPerfilUrl" class="avatar avatar-text">
+            {{ usuario.nombre | iniciales: usuario.apellido }}
+          </div>
+
+          <div class="usuario-info">
+            <strong>{{ usuario.nombre }} {{ usuario.apellido }}</strong>
+            <span>@{{ usuario.nombreUsuario }} · {{ usuario.correo }}</span>
+            <p>{{ usuario.descripcionBreve | resumen: 80 }}</p>
+
+            <div class="usuario-meta">
+              <span>{{ usuario.perfil }}</span>
+              <span [class.activo]="usuario.activo" [class.inactivo]="!usuario.activo">
+                {{ usuario.activo ? 'habilitado' : 'deshabilitado' }}
+              </span>
+              <span>Alta: {{ usuario.createdAt | fechaCorta }}</span>
+            </div>
+          </div>
+
+          <div class="usuario-actions">
+            <button
+              *ngIf="usuario.activo"
+              type="button"
+              class="btn btn-sm btn-outline-danger"
+              (click)="deshabilitar(usuario)"
+            >
+              Deshabilitar
+            </button>
+
+            <button
+              *ngIf="!usuario.activo"
+              type="button"
+              class="btn btn-sm btn-outline-success"
+              (click)="habilitar(usuario)"
+            >
+              Habilitar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <button
+        *ngIf="quedanUsuarios"
+        type="button"
+        class="btn btn-outline-primary w-100 mt-3"
+        (click)="cargarMas()"
+      >
+        Cargar más usuarios
+      </button>
+    </div>
+  </div>
+</section>

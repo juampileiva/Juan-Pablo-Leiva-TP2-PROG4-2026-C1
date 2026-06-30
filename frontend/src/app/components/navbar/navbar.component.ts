@@ -30,6 +30,10 @@ export class NavbarComponent {
     return this.authService.obtenerUsuario() !== null;
   }
 
+  esAdministrador(): boolean {
+    return this.authService.obtenerUsuario()?.perfil === 'administrador';
+  }
+
   cerrarSesion(): void {
     this.authService.cerrarSesion();
     this.menuAbierto = false;

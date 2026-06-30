@@ -55,6 +55,25 @@
         Mi Perfil
       </a>
 
+
+      <a
+        *ngIf="esAdministrador()"
+        routerLink="/dashboard/usuarios"
+        routerLinkActive="active"
+        (click)="cerrarMenu()"
+      >
+        Usuarios
+      </a>
+
+      <a
+        *ngIf="esAdministrador()"
+        routerLink="/dashboard/estadisticas"
+        routerLinkActive="active"
+        (click)="cerrarMenu()"
+      >
+        Estadísticas
+      </a>
+
       <button
         class="logout-button"
         type="button"
