@@ -1,42 +1,55 @@
-<div class="card card-custom h-100 publicacion-card">
-  <div class="card-body p-4">
-    <div class="d-flex gap-3 align-items-center mb-3">
+﻿<div class="card publicacion-card">
+  <div class="card-body">
+    <div class="d-flex align-items-center gap-3 mb-3">
       <img
         *ngIf="publicacion.autorFotoUrl"
         [src]="publicacion.autorFotoUrl"
         class="autor-foto"
         alt="Foto de perfil"
+        (error)="ocultarImagen($event)"
       />
 
-      <div class="autor-foto autor-placeholder" *ngIf="!publicacion.autorFotoUrl">
-        {{ publicacion.autorNombre.charAt(0) }}
+      <div
+        *ngIf="!publicacion.autorFotoUrl"
+        class="autor-placeholder rounded-circle"
+      >
+        {{ publicacion.autorNombre.charAt(0) || publicacion.autorUsuario.charAt(0) || 'U' }}
       </div>
 
-      <div class="flex-grow-1">
-        <h2 class="h5 fw-bold mb-1">{{ publicacion.titulo }}</h2>
-        <div class="text-muted small">
+      <div>
+        <h2 class="h5 mb-1">{{ publicacion.titulo }}</h2>
+        <p class="text-muted mb-0">
           {{ publicacion.autorNombre }} · @{{ publicacion.autorUsuario }}
-        </div>
+        </p>
       </div>
     </div>
 
-    <p class="mb-3 texto-publicacion">
+    <p class="texto-publicacion mb-3">
       {{ publicacion.descripcion }}
     </p>
 
     <img
       *ngIf="publicacion.imagenUrl"
       [src]="publicacion.imagenUrl"
-      class="imagen-publicacion mb-3"
-      alt="Imagen de publicación"
+      class="imagen-publicacion"
+      alt="Imagen de publicacion"
+      (error)="ocultarImagen($event)"
     />
 
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 text-muted small mb-3">
+    <div class="d-flex justify-content-between align-items-center mt-3 text-muted small">
       <span>{{ publicacion.createdAt | date: 'dd/MM/yyyy HH:mm' }}</span>
-      <span>{{ publicacion.cantidadComentarios }} comentarios</span>
+      <span>{{ publicacion.cantidadComentarios || 0 }} comentarios</span>
     </div>
 
-    <div class="d-flex flex-wrap gap-2 align-items-center">
+    <div class="d-flex gap-2 mt-3 flex-wrap">
+      <button
+        type="button"
+        class="btn btn-sm btn-outline-primary"
+        (click)="verDetalle()"
+      >
+        Ver publicacion / Comentar
+      </button>
+
       <button
         type="button"
         class="btn btn-sm"
@@ -44,15 +57,8 @@
         (click)="cambiarLike.emit(publicacion)"
       >
         {{ publicacion.meGusta ? 'Quitar me gusta' : 'Me gusta' }}
-        <span class="ms-1">{{ publicacion.cantidadLikes }}</span>
+        <span class="ms-1">{{ publicacion.cantidadLikes || 0 }}</span>
       </button>
-
-      <a
-        class="btn btn-sm btn-outline-secondary"
-        [routerLink]="['/publicaciones', publicacion.id]"
-      >
-        Ver publicación
-      </a>
 
       <button
         type="button"
@@ -60,15 +66,14 @@
         *ngIf="publicacion.esMia || puedeEliminar"
         (click)="eliminar.emit(publicacion)"
       >
-        Eliminar
+        Dar de baja
       </button>
     </div>
 
-    <div class="comentarios mt-3" *ngIf="mostrandoPerfil && publicacion.comentarios.length > 0">
-      <div class="fw-bold small mb-2">Comentarios</div>
+    <div class="comentarios mt-3" *ngIf="publicacion.comentarios?.length">
       <div class="comentario" *ngFor="let comentario of publicacion.comentarios">
-        <strong>@{{ comentario.nombreUsuario }}:</strong>
-        <span>{{ comentario.mensaje }}</span>
+        <strong>@{{ comentario.nombreUsuario }}</strong>
+        {{ comentario.mensaje }}
       </div>
     </div>
   </div>

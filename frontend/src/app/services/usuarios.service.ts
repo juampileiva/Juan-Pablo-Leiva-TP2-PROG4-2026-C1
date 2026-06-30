@@ -1,14 +1,16 @@
-import { HttpClient } from '@angular/common/http';
+﻿import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Usuario } from './auth.service';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root',
+})
 export class UsuariosService {
   private apiUrl =
     window.location.hostname === 'localhost'
       ? 'http://localhost:3000'
-      : 'https://juan-pablo-leiva-tp2-prog4-2026-c1.onrender.com';
+      : 'https://juan-pablo-leiva-tp2-prog4-2026-c1-1.onrender.com';
 
   constructor(private http: HttpClient) {}
 
@@ -16,15 +18,20 @@ export class UsuariosService {
     return this.http.get<{ usuarios: Usuario[] }>(`${this.apiUrl}/usuarios`);
   }
 
-  crear(data: FormData): Observable<Usuario> {
-    return this.http.post<Usuario>(`${this.apiUrl}/usuarios`, data);
+  crear(data: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/usuarios`, data);
   }
 
   deshabilitar(id: string): Observable<{ mensaje: string; usuario: Usuario }> {
-    return this.http.delete<{ mensaje: string; usuario: Usuario }>(`${this.apiUrl}/usuarios/${id}`);
+    return this.http.delete<{ mensaje: string; usuario: Usuario }>(
+      `${this.apiUrl}/usuarios/${id}`,
+    );
   }
 
   habilitar(id: string): Observable<{ mensaje: string; usuario: Usuario }> {
-    return this.http.post<{ mensaje: string; usuario: Usuario }>(`${this.apiUrl}/usuarios/${id}/habilitar`, {});
+    return this.http.post<{ mensaje: string; usuario: Usuario }>(
+      `${this.apiUrl}/usuarios/${id}/habilitar`,
+      {},
+    );
   }
 }

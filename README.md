@@ -22,7 +22,7 @@ La aplicación se encuentra dividida en dos proyectos separados:
 
 ### Frontend
 
-https://red-social-tp2-frontend.onrender.com/login
+https://red-social-tp2-frontend.onrender.com
 
 ### Backend
 

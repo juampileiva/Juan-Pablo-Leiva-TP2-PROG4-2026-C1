@@ -1,5 +1,40 @@
-.publicaciones-page {
+﻿.publicaciones-page {
   position: relative;
+  padding: 32px 0 50px;
+}
+
+.publicaciones-page::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.13), transparent 32%),
+    radial-gradient(circle at bottom right, rgba(20, 184, 166, 0.13), transparent 30%),
+    linear-gradient(180deg, #f8fafc 0%, #eef6ff 100%);
+}
+
+.page-header {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 28px;
+  padding: 28px;
+  margin-bottom: 26px;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(12px);
+}
+
+.page-title {
+  margin: 0;
+  color: #0f172a;
+  font-weight: 900;
+  letter-spacing: -0.8px;
+}
+
+.page-subtitle {
+  margin: 8px 0 0;
+  color: #64748b;
+  font-weight: 500;
 }
 
 .acciones-publicaciones {
@@ -10,8 +45,46 @@
   flex-wrap: wrap;
 }
 
+.acciones-publicaciones .btn,
+.btn-primary {
+  border: 0;
+  border-radius: 14px;
+  padding: 11px 18px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #2563eb, #14b8a6);
+  color: #ffffff;
+  box-shadow: 0 14px 28px rgba(37, 99, 235, 0.24);
+}
+
+.btn-outline-primary,
+.btn-outline-secondary {
+  border-radius: 14px;
+  font-weight: 900;
+  background: #ffffff;
+  color: #1e293b;
+  border: 2px solid #2563eb;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-secondary:hover {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+.btn-group .btn {
+  border-radius: 12px;
+}
+
+.btn-group .btn.active,
+.btn-group .btn.btn-primary {
+  background: linear-gradient(135deg, #2563eb, #14b8a6);
+  color: #ffffff;
+  border: 2px solid transparent;
+}
+
 .feed-publicaciones {
-  min-height: 420px;
+  min-height: auto;
 }
 
 .preview-publicacion {
@@ -22,10 +95,6 @@
   border: 1px solid #e2e8f0;
 }
 
-.btn-group .btn {
-  border-radius: 12px;
-}
-
 .modal-publicacion-backdrop {
   position: fixed;
   inset: 0;
@@ -34,8 +103,8 @@
   align-items: center;
   justify-content: center;
   padding: 24px;
-  background: rgba(15, 23, 42, 0.55);
-  backdrop-filter: blur(4px);
+  background: rgba(15, 23, 42, 0.58);
+  backdrop-filter: blur(5px);
 }
 
 .modal-publicacion {
@@ -43,9 +112,10 @@
   max-height: 92vh;
   overflow-y: auto;
   background: #ffffff;
-  border-radius: 24px;
-  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.28);
-  padding: 28px;
+  border-radius: 28px;
+  box-shadow: 0 28px 80px rgba(15, 23, 42, 0.32);
+  padding: 30px;
+  border: 1px solid rgba(226, 232, 240, 0.9);
 }
 
 .modal-publicacion-header {
@@ -55,9 +125,15 @@
   margin-bottom: 24px;
 }
 
+.modal-publicacion-header h2 {
+  color: #0f172a;
+  font-weight: 900;
+  margin: 0;
+}
+
 .btn-cerrar-modal {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border: 0;
   border-radius: 50%;
   background: #f1f5f9;
@@ -74,7 +150,18 @@
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 20px;
+  margin-top: 22px;
+}
+
+.form-control {
+  border-radius: 14px;
+  border: 1px solid #dbe3ef;
+  padding: 12px 14px;
+}
+
+.form-control:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
 }
 
 @media (max-width: 768px) {
@@ -93,4 +180,56 @@
   .modal-publicacion-footer .btn {
     width: 100%;
   }
+}
+
+/* Fondo oscuro en publicaciones sin tocar las cards */
+.publicaciones-page::before {
+  background: linear-gradient(135deg, #0f172a 0%, #111827 45%, #1e293b 100%) !important;
+}
+
+/* Feed en una sola columna, sin huecos entre publicaciones */
+.feed-publicaciones {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 18px !important;
+  width: 100% !important;
+}
+
+.feed-publicaciones app-publicacion-card {
+  display: block !important;
+  width: 100% !important;
+  max-width: 680px !important;
+}
+
+.publicaciones-page .row,
+.publicaciones-page .row > * {
+  width: 100% !important;
+}
+
+.publicaciones-page .col,
+.publicaciones-page [class*="col-"] {
+  width: 100% !important;
+  max-width: 680px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Separacion de botones de orden */
+.acciones-publicaciones,
+.btn-group {
+  gap: 10px !important;
+}
+
+.btn-group {
+  display: flex !important;
+  flex-wrap: wrap !important;
+}
+
+.btn-group .btn {
+  margin-right: 8px !important;
+}
+
+.btn-group .btn:last-child {
+  margin-right: 0 !important;
 }
